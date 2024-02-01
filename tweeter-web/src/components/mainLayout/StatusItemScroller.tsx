@@ -60,14 +60,6 @@ export const StatusItemScroller = (props : Props) => {
         }
     };
 
-    const getUser = async (
-        authToken: AuthToken,
-        alias: string
-    ): Promise<User | null> => {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.findUserByAlias(alias);
-    };
-
     return (
         <div className="container px-0 overflow-visible vh-100">
             <InfiniteScroll
