@@ -13,7 +13,6 @@ import {FollowersPresenter} from "./presenter/FollowersPresenter";
 import {StatusItemView} from "./presenter/StatusItemPresenter";
 import {FeedPresenter} from "./presenter/FeedPresenter";
 import {StoryPresenter} from "./presenter/StoryPresenter";
-import {LoginPresenter, LoginView} from "./presenter/LoginPresenter";
 
 const App = () => {
     const { currentUser, authToken } = useUserInfoHook();
