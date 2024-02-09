@@ -1,6 +1,7 @@
 import {AuthToken, FakeData, User} from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import {useUserInfoHook} from "../userInfo/UserInfoHook";
+import {UserService} from "../../model/UserService";
 
 interface NavigationHook {
     navigateToUser (event : React.MouseEvent) : Promise<void>,
@@ -12,23 +13,31 @@ export const useNavigationHook = () : NavigationHook => {
     const { displayErrorMessage } = useToastListener();
     const { setDisplayedUser, currentUser, authToken } =
         useUserInfoHook();
+    const service = new UserService()
 
     const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
         event.preventDefault();
 
-        try {
+        try
+        {
             let alias = extractAlias(event.target.toString());
 
-            let user = await getUser(authToken!, alias);
+            let user = await service.getUser(authToken!, alias);
 
-            if (!!user) {
-                if (currentUser!.equals(user)) {
+            if(!!user)
+            {
+                if(currentUser!.equals(user))
+                {
                     setDisplayedUser(currentUser!);
-                } else {
+                }
+                else
+                {
                     setDisplayedUser(user);
                 }
             }
-        } catch (error) {
+        }
+        catch (error)
+        {
             displayErrorMessage(`Failed to get user because of exception: ${error}`);
         }
     };
@@ -38,17 +47,9 @@ export const useNavigationHook = () : NavigationHook => {
         return value.substring(index);
     };
 
-    const getUser = async (
-        authToken: AuthToken,
-        alias: string
-    ): Promise<User | null> => {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.findUserByAlias(alias);
-    };
-
     return {
         navigateToUser : navigateToUser,
         extractAlias : extractAlias,
-        getUser : getUser
+        getUser : service.getUser
     };
 }
