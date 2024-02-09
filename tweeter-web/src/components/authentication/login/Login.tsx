@@ -2,11 +2,10 @@ import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthenticationFormLayout from "../AuthenticationFormLayout";
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
-import {useUserInfoHook} from "../../userInfo/UserInfoHook";
+import {LoginPresenter, LoginView} from "../../../presenter/LoginPresenter";
+import AuthenticationFormLayout from "../AuthenticationFormLayout";
 
 interface Props {
   originalUrl?: string;
@@ -18,47 +17,28 @@ const Login = (props: Props) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
-  const { updateUserInfo } = useUserInfoHook();
   const { displayErrorMessage } = useToastListener();
 
   const rememberMeRef = useRef(rememberMe);
   rememberMeRef.current = rememberMe;
 
-  const checkSubmitButtonStatus = (): boolean => {
-    return !alias || !password;
-  };
+  const listener: LoginView = {
+    alias: alias,
+    password: password,
+    navigateTo: navigate,
+    displayErrorMessage: displayErrorMessage
+  }
+
+  const [presenter] = useState(new LoginPresenter(listener));
 
   const doLogin = async () => {
-    try {
-      let [user, authToken] = await login(alias, password);
-
-      updateUserInfo(user, user, authToken, rememberMeRef.current);
-
-      if (!!props.originalUrl) {
-        navigate(props.originalUrl);
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`
-      );
-    }
+      await presenter.doLogin(props.originalUrl!, rememberMeRef.current)
   };
 
-  const login = async (
-    alias: string,
-    password: string
-  ): Promise<[User, AuthToken]> => {
-    // TODO: Replace with the result of calling the server
-    let user = FakeData.instance.firstUser;
-
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
-
-    return [user, FakeData.instance.authToken];
-  };
+  const checkSubmitButtonStatus = () =>
+  {
+    return !alias || !password;
+  }
 
   const inputFieldGenerator = () => {
     return (

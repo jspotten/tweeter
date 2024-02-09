@@ -13,6 +13,7 @@ import {FollowersPresenter} from "./presenter/FollowersPresenter";
 import {StatusItemView} from "./presenter/StatusItemPresenter";
 import {FeedPresenter} from "./presenter/FeedPresenter";
 import {StoryPresenter} from "./presenter/StoryPresenter";
+import {LoginPresenter, LoginView} from "./presenter/LoginPresenter";
 
 const App = () => {
     const { currentUser, authToken } = useUserInfoHook();
@@ -94,7 +95,9 @@ const UnauthenticatedRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="*" element={<Login originalUrl={location.pathname} />} />
+            <Route path="*" element={
+                <Login originalUrl={location.pathname}/>
+            } />
         </Routes>
     );
 };
