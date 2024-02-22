@@ -7,6 +7,7 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
 import {RegisterPresenter, RegisterView} from "../../../presenter/RegisterPresenter";
 import {useUserInfoHook} from "../../userInfo/UserInfoHook";
+import {AuthToken, User} from "tweeter-shared";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -28,24 +29,23 @@ const Register = () => {
     return !firstName || !lastName || !alias || !password || !imageUrl;
   };
 
+  const authenticate = (user: User, authToken: AuthToken) => {
+    updateUserInfo(user, user, authToken, rememberMe)
+  }
+
   const listener: RegisterView = {
-    firstName: firstName,
-    lastName: lastName,
-    alias: alias,
-    password: password,
-    imageBytes: imageBytes,
     setImageBytes: setImageBytes,
     imageUrl: imageUrl,
     setImageUrl: setImageUrl,
     navigateTo: navigate,
-    updateUserInfo: updateUserInfo,
+    authenticate: authenticate,
     displayErrorMessage: displayErrorMessage
   }
 
   const [presenter] = useState(new RegisterPresenter(listener));
 
   const doRegister = async () => {
-    await presenter.doRegister(rememberMeRef.current)
+    await presenter.register(firstName, lastName, alias, password, imageBytes)
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) =>

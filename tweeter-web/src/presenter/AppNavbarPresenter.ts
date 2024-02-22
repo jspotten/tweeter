@@ -1,5 +1,5 @@
 import {AuthToken} from "tweeter-shared";
-import {LogoutService} from "../model/LogoutService";
+import {AuthenticateService} from "../model/AuthenticateService";
 
 export interface AppNavbarView {
     authToken: AuthToken | null,
@@ -12,11 +12,11 @@ export interface AppNavbarView {
 
 export class AppNavbarPresenter {
     private view: AppNavbarView;
-    private service: LogoutService;
+    private service: AuthenticateService;
 
     public constructor(view: AppNavbarView) {
         this.view = view;
-        this.service = new LogoutService();
+        this.service = new AuthenticateService();
     }
 
     public async logOut(){

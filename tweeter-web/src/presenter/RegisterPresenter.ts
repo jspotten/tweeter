@@ -1,31 +1,25 @@
-import {ChangeEvent} from "react";
 import {Buffer} from "buffer";
-import {RegisterService} from "../model/RegisterService";
 import {AuthToken, User} from "tweeter-shared";
+import {AuthenticateService} from "../model/AuthenticateService";
 
 export interface RegisterView {
-    firstName: string,
-    lastName: string,
-    alias: string;
-    password: string;
-    imageBytes: Uint8Array,
     setImageBytes: (bytes: Uint8Array) => void,
     imageUrl: string,
     setImageUrl: (url: string) => void,
+    authenticate: (user: User, authToken: AuthToken) => void,
     navigateTo: (url: string) => void
-    updateUserInfo: (user1: User, user2: User, authToken: AuthToken, rememberMe: boolean) => void,
     displayErrorMessage: (msg: string) => void
 }
 
 export class RegisterPresenter
 {
     private view: RegisterView;
-    private service: RegisterService;
+    private service: AuthenticateService;
 
     public constructor(view: RegisterView)
     {
         this.view = view;
-        this.service = new RegisterService();
+        this.service = new AuthenticateService();
     }
 
     public handleImageFile(file: File | undefined)
@@ -58,19 +52,19 @@ export class RegisterPresenter
         }
     }
 
-    public async doRegister(rememberMe: boolean)
+    public async register(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array)
     {
         try
         {
             let [user, authToken] = await this.service.register(
-                this.view.firstName,
-                this.view.lastName,
-                this.view.alias,
-                this.view.password,
-                this.view.imageBytes
+                firstName,
+                lastName,
+                alias,
+                password,
+                imageBytes
             );
 
-            this.view.updateUserInfo(user, user, authToken, rememberMe);
+            this.view.authenticate(user, authToken);
             this.view.navigateTo("/");
         }
         catch (error)

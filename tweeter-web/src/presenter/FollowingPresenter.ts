@@ -1,16 +1,16 @@
 import {AuthToken, User} from "tweeter-shared";
-import {FollowService} from "../model/FollowService";
 import {UserItemPresenter, UserItemView} from "./UserItemPresenter";
+import {UserService} from "../model/UserService";
 
 export const PAGE_SIZE = 10;
 
 export class FollowingPresenter extends UserItemPresenter {
-    private service: FollowService;
+    private service: UserService;
     private lastItem: User | null = null;
 
     public constructor(view: UserItemView) {
         super(view);
-        this.service = new FollowService()
+        this.service = new UserService()
     }
 
     public async loadMoreItems(authToken: AuthToken, user: User) {

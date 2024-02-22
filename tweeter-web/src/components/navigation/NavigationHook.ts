@@ -1,12 +1,11 @@
-import {AuthToken, FakeData, User} from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import {useUserInfoHook} from "../userInfo/UserInfoHook";
 import {UserService} from "../../model/UserService";
+import {NavigationPresenter, NavigationView} from "../../presenter/NavigationPresenter";
+import {useState} from "react";
 
 interface NavigationHook {
     navigateToUser (event : React.MouseEvent) : Promise<void>,
-    extractAlias (value : string) : string,
-    getUser (authToken : AuthToken, alias : string) : Promise<User | null>
 }
 
 export const useNavigationHook = () : NavigationHook => {
@@ -15,41 +14,20 @@ export const useNavigationHook = () : NavigationHook => {
         useUserInfoHook();
     const service = new UserService()
 
-    const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
-        event.preventDefault();
+    const listener: NavigationView = {
+        authToken: authToken,
+        currentUser: currentUser,
+        setDisplayedUser: setDisplayedUser,
+        displayErrorMessage: displayErrorMessage,
+    }
 
-        try
-        {
-            let alias = extractAlias(event.target.toString());
+    const [presenter] = useState(new NavigationPresenter(listener))
 
-            let user = await service.getUser(authToken!, alias);
-
-            if(!!user)
-            {
-                if(currentUser!.equals(user))
-                {
-                    setDisplayedUser(currentUser!);
-                }
-                else
-                {
-                    setDisplayedUser(user);
-                }
-            }
-        }
-        catch (error)
-        {
-            displayErrorMessage(`Failed to get user because of exception: ${error}`);
-        }
-    };
-
-    const extractAlias = (value: string): string => {
-        let index = value.indexOf("@");
-        return value.substring(index);
+    const navigateToUser = async (event: React.MouseEvent) => {
+        await presenter.navigateToUser(event);
     };
 
     return {
         navigateToUser : navigateToUser,
-        extractAlias : extractAlias,
-        getUser : service.getUser
     };
 }

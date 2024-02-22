@@ -22,11 +22,6 @@ const UserItemScroller = (props: Props) => {
 
   const { displayedUser, authToken } = useUserInfoHook();
 
-  // Load initial items
-  useEffect(() => {
-    loadMoreItems();
-  }, []);
-
   const listener: UserItemView = {
     addItems: (newItems: User[]) => {
       setItems([...itemsReference.current, ...newItems])
@@ -35,10 +30,15 @@ const UserItemScroller = (props: Props) => {
   };
 
   const [presenter] = useState(props.presenterGenerator(listener))
+  // Load initial items
 
   const loadMoreItems = async () => {
     presenter.loadMoreItems(authToken!, displayedUser!);
   };
+
+  useEffect(() => {
+    loadMoreItems();
+  }, []);
 
   return (
     <div className="container px-0 overflow-visible vh-100">

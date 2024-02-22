@@ -1,9 +1,8 @@
-import {LoginService} from "../model/LoginService";
 import {AuthToken, User} from "tweeter-shared";
+import {AuthenticateService} from "../model/AuthenticateService";
 
 export interface LoginView {
-    alias: string,
-    password: string,
+    authenticate: (user: User, authToken: AuthToken) => void,
     navigateTo: (url: string) => void,
     updateUserInfo: (user1: User, user2: User, authToken: AuthToken, rememberMe: boolean) => void,
     displayErrorMessage: (msg: string) => void,
@@ -12,20 +11,20 @@ export interface LoginView {
 export class LoginPresenter
 {
     private view: LoginView;
-    private service: LoginService;
+    private service: AuthenticateService;
 
     public constructor(view: LoginView)
     {
         this.view = view
-        this.service = new LoginService()
+        this.service = new AuthenticateService()
     }
 
-    public async doLogin(url: string, rememberMe: boolean)
+    public async login(alias: string, password: string, url: string)
     {
         try
         {
-            let [user, authToken] = await this.service.login(this.view.alias, this.view.alias);
-            this.view.updateUserInfo(user, user, authToken, rememberMe);
+            let [user, authToken] = await this.service.login(alias, password);
+            this.view.authenticate(user, authToken);
 
             if (!!url)
             {

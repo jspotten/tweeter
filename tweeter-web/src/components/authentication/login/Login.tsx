@@ -7,6 +7,7 @@ import {AuthFields} from "../AuthFields";
 import {LoginPresenter, LoginView} from "../../../presenter/LoginPresenter";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import {useUserInfoHook} from "../../userInfo/UserInfoHook";
+import {AuthToken, User} from "tweeter-shared";
 
 interface Props {
   originalUrl?: string;
@@ -24,9 +25,12 @@ const Login = (props: Props) => {
   const rememberMeRef = useRef(rememberMe);
   rememberMeRef.current = rememberMe;
 
+  const authenticate = (user: User, authToken: AuthToken) => {
+    updateUserInfo(user, user, authToken, rememberMe)
+  }
+
   const listener: LoginView = {
-    alias: alias,
-    password: password,
+    authenticate: authenticate,
     navigateTo: navigate,
     updateUserInfo: updateUserInfo,
     displayErrorMessage: displayErrorMessage
@@ -35,8 +39,10 @@ const Login = (props: Props) => {
   const [presenter] = useState(new LoginPresenter(listener));
 
   const doLogin = async () => {
-      await presenter.doLogin(props.originalUrl!, rememberMeRef.current)
+      await presenter.login(alias, password, props.originalUrl!)
   };
+
+
 
   const checkSubmitButtonStatus = () =>
   {
