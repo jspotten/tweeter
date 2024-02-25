@@ -1,24 +1,21 @@
 import {AuthToken, Status, User} from "tweeter-shared";
-import {StatusService} from "../model/StatusService";
+import {StatusService} from "../../model/StatusService";
+import {MessageView, Presenter, View} from "../Presenter";
 
-export interface PostStatusView {
+export interface PostStatusView extends MessageView {
     post: string,
     setPost: (value: string) => void,
     currentUser: User | null,
     authToken: AuthToken | null,
-    displayInfoMessage: (msg: string, status: number) => void,
-    clearLastInfoMessage: () => void,
-    displayErrorMessage: (msg: string) => void,
 }
 
-export class PostStatusPresenter
+export class PostStatusPresenter extends Presenter<PostStatusView>
 {
-    private view: PostStatusView;
     private service: StatusService;
 
     public constructor(view: PostStatusView)
     {
-        this.view = view;
+        super(view);
         this.service = new StatusService()
     }
 
@@ -26,22 +23,16 @@ export class PostStatusPresenter
     public async submitPost(event: React.MouseEvent)
     {
         event.preventDefault();
-
-        try {
+        await this.reportFailingAction(async () => {
             this.view.displayInfoMessage("Posting status...", 0);
-
             let status = new Status(this.view.post, this.view.currentUser!, Date.now());
 
             await this.service.postStatus(this.view.authToken!, status);
 
             this.view.clearLastInfoMessage();
             this.view.setPost("");
-            this.view.displayInfoMessage("Status posted!", 2000);
-        } catch (error) {
-            this.view.displayErrorMessage(
-                `Failed to post the status because of exception: ${error}`
-            );
-        }
+            this.view.displayInfoMessage("Status posted!", 200);
+        }, 'post the status')
     };
 
     public clearPost(event: React.MouseEvent)

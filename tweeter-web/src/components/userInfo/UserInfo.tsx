@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useToastListener from "../toaster/ToastListenerHook";
 import {useUserInfoHook} from "./UserInfoHook";
-import {UserInfoPresenter, UserInfoView} from "../../presenter/UserInfoPresenter";
+import {UserInfoPresenter, UserInfoView} from "../../presenter/user/UserInfoPresenter";
 
 const UserInfo = () => {
   const [isFollower, setIsFollower] = useState(false);

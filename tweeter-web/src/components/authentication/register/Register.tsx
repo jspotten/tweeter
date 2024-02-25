@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
-import {RegisterPresenter, RegisterView} from "../../../presenter/RegisterPresenter";
+import {RegisterPresenter, RegisterView} from "../../../presenter/authentication/RegisterPresenter";
 import {useUserInfoHook} from "../../userInfo/UserInfoHook";
 import {AuthToken, User} from "tweeter-shared";
 

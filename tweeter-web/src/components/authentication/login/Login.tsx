@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
-import {LoginPresenter, LoginView} from "../../../presenter/LoginPresenter";
+import {LoginPresenter, LoginView} from "../../../presenter/authentication/LoginPresenter";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import {useUserInfoHook} from "../../userInfo/UserInfoHook";
 import {AuthToken, User} from "tweeter-shared";
@@ -32,7 +32,6 @@ const Login = (props: Props) => {
   const listener: LoginView = {
     authenticate: authenticate,
     navigateTo: navigate,
-    updateUserInfo: updateUserInfo,
     displayErrorMessage: displayErrorMessage
   }
 
