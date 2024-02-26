@@ -1,24 +1,23 @@
 import {Buffer} from "buffer";
+import {AuthenticationPresenter, AuthenticationView} from "./AuthenticationPresenter";
 import {AuthToken, User} from "tweeter-shared";
-import {AuthenticateService} from "../../model/AuthenticateService";
-import {Presenter, View} from "../Presenter";
 
-export interface RegisterView extends View {
+export interface RegisterView extends AuthenticationView {
     setImageBytes: (bytes: Uint8Array) => void,
     imageUrl: string,
     setImageUrl: (url: string) => void,
-    authenticate: (user: User, authToken: AuthToken) => void,
-    navigateTo: (url: string) => void
 }
 
-export class RegisterPresenter extends Presenter<RegisterView>
+export class RegisterPresenter extends AuthenticationPresenter<RegisterView>
 {
-    private service: AuthenticateService;
-
     public constructor(view: RegisterView)
     {
         super(view);
-        this.service = new AuthenticateService();
+    }
+
+    protected get view()
+    {
+        return super.view as RegisterView
     }
 
     public handleImageFile(file: File | undefined)
@@ -53,17 +52,20 @@ export class RegisterPresenter extends Presenter<RegisterView>
 
     public async register(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array)
     {
-        await this.reportFailingAction(async () => {
-            let [user, authToken] = await this.service.register(
-                firstName,
-                lastName,
-                alias,
-                password,
-                imageBytes
-            );
+        await this.authenticate("/", firstName, lastName, alias, password, imageBytes)
+    }
 
-            this.view.authenticate(user, authToken);
-            this.view.navigateTo("/");
-        }, 'register user');
+    protected validate(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array): Promise<[User, AuthToken]> {
+        return this.service.register(
+            firstName,
+            lastName,
+            alias,
+            password,
+            imageBytes
+        );
+    }
+
+    protected getItemDetails(): string {
+        return 'register user';
     }
 }
