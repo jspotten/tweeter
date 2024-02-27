@@ -17,9 +17,11 @@ export abstract class AuthenticationPresenter<T> extends Presenter<Authenticatio
 
     protected async authenticate(url: string, ...args: any[])
     {
+        console.log('hello3')
         await this.reportFailingAction(async () => {
-            let [user, authToken] = await this.validate(args)
-
+            console.log('hello4')
+            let [user, authToken] = await this.validate(...args)
+            console.log('hello5')
             this.view.authenticate(user, authToken);
             this.view.navigateTo(url);
         }, this.getItemDetails());

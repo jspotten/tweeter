@@ -32,7 +32,7 @@ export class PostStatusPresenter extends Presenter<PostStatusView>
             this.view.clearLastInfoMessage();
             this.view.setPost("");
             this.view.displayInfoMessage("Status posted!", 200);
-        }, 'post the status')
+        }, this.getItemDetails())
     };
 
     public clearPost(event: React.MouseEvent)
@@ -40,4 +40,8 @@ export class PostStatusPresenter extends Presenter<PostStatusView>
         event.preventDefault();
         this.view.setPost("");
     };
+
+    protected getItemDetails(): string {
+        return 'post the status';
+    }
 }

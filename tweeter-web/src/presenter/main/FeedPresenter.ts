@@ -7,20 +7,6 @@ export class FeedPresenter extends StatusItemPresenter {
         super(view);
     }
 
-    // protected async loadMoreItems(authToken: AuthToken, user: User)
-    // {
-    //     await this.reportFailingAction(async () => {
-    //         if (this.hasMoreItems)
-    //         {
-    //             let [newItems, hasMore] = await this.service.loadMoreFeedItems(authToken, user, PAGE_SIZE, this.lastItem);
-    //
-    //             this.hasMoreItems = hasMore;
-    //             this.lastItem = newItems[newItems.length - 1];
-    //             this.view.addItems(newItems);
-    //         }
-    //     }, 'load feed')
-    // };
-
     protected getMoreItems(authToken: AuthToken, user: User): Promise<[Status[], boolean]> {
         return this.service.loadMoreFeedItems(authToken, user, PAGE_SIZE, this.lastItem)
     }

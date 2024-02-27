@@ -12,7 +12,7 @@ export abstract class PagedItemPresenter<T, U> extends Presenter<PagedItemView<T
     private _hasMoreItems : boolean = true;
     private _lastItem: T | null = null;
 
-    protected constructor(view: PagedItemView<T>) {
+    public constructor(view: PagedItemView<T>) {
         super(view);
         this._service = this.createService();
     }
@@ -24,7 +24,7 @@ export abstract class PagedItemPresenter<T, U> extends Presenter<PagedItemView<T
         return this._service
     }
 
-    protected get hasMoreItems()
+    public get hasMoreItems()
     {
         return this._hasMoreItems;
     }
@@ -43,7 +43,7 @@ export abstract class PagedItemPresenter<T, U> extends Presenter<PagedItemView<T
         this._lastItem = item;
     }
 
-    protected async loadMoreItems(authToken: AuthToken, user: User)
+    public async loadMoreItems(authToken: AuthToken, user: User)
     {
         await this.reportFailingAction(async () => {
             if (this.hasMoreItems)

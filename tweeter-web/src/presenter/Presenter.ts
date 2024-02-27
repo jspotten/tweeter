@@ -8,7 +8,7 @@ export interface MessageView extends View {
     clearLastInfoMessage: () => void,
 }
 
-export class Presenter<T extends View> {
+export abstract class Presenter<T extends View> {
     private readonly _view : T;
 
     protected constructor(view: T) {

@@ -52,7 +52,9 @@ export class RegisterPresenter extends AuthenticationPresenter<RegisterView>
 
     public async register(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array)
     {
+        console.log('hello1')
         await this.authenticate("/", firstName, lastName, alias, password, imageBytes)
+        console.log('hello2')
     }
 
     protected validate(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array): Promise<[User, AuthToken]> {

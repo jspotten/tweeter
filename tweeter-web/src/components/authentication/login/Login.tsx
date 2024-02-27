@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
-import {LoginPresenter, LoginView} from "../../../presenter/authentication/LoginPresenter";
+import {LoginPresenter} from "../../../presenter/authentication/LoginPresenter";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import {useUserInfoHook} from "../../userInfo/UserInfoHook";
 import {AuthToken, User} from "tweeter-shared";
+import {AuthenticationView} from "../../../presenter/authentication/AuthenticationPresenter";
 
 interface Props {
   originalUrl?: string;
@@ -29,7 +30,7 @@ const Login = (props: Props) => {
     updateUserInfo(user, user, authToken, rememberMe)
   }
 
-  const listener: LoginView = {
+  const listener: AuthenticationView = {
     authenticate: authenticate,
     navigateTo: navigate,
     displayErrorMessage: displayErrorMessage

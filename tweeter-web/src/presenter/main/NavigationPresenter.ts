@@ -35,7 +35,7 @@ export class NavigationPresenter extends Presenter<NavigationView>{
                     this.view.setDisplayedUser(user);
                 }
             }
-        }, 'get user')
+        }, this.getItemDetails())
     }
 
     public extractAlias(value: string): string
@@ -43,4 +43,8 @@ export class NavigationPresenter extends Presenter<NavigationView>{
         let index = value.indexOf("@");
         return value.substring(index);
     };
+
+    protected getItemDetails(): string {
+        return 'get user';
+    }
 }
