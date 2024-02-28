@@ -11,11 +11,10 @@ export interface UserInfoView extends MessageView {
     setFollowersCount: (value: number) => void,
 }
 
-export class UserInfoPresenter extends Presenter<UserInfoView>{
+export class UserInfoPresenter extends Presenter<UserInfoView> {
     private service: UserService
 
-    public constructor(view: UserInfoView)
-    {
+    public constructor(view: UserInfoView) {
         super(view)
         this.service = new UserService()
     }
@@ -24,7 +23,7 @@ export class UserInfoPresenter extends Presenter<UserInfoView>{
         authToken: AuthToken,
         currentUser: User,
         displayedUser: User
-    ){
+    ) {
         await this.reportFailingAction(async () => {
             if (currentUser === displayedUser) {
                 this.view.setIsFollower(false);
@@ -39,7 +38,7 @@ export class UserInfoPresenter extends Presenter<UserInfoView>{
     public async setNumbFollowees(
         authToken: AuthToken,
         displayedUser: User
-    ){
+    ) {
         await this.reportFailingAction(async () => {
             this.view.setFolloweesCount(await this.service.getFolloweesCount(authToken, displayedUser));
         }, 'get followees count');
@@ -55,47 +54,57 @@ export class UserInfoPresenter extends Presenter<UserInfoView>{
     }
 
 
-
     public async followDisplayedUser(
         event: React.MouseEvent
     ): Promise<void> {
-        event.preventDefault();
-        await this.reportFailingAction(async () => {
-            this.view.displayInfoMessage(`Adding ${this.view.displayedUser!.name} to followers...`, 0);
-
-            let [followersCount, followeesCount] = await this.service.follow(
-                this.view.authToken!,
-                this.view.displayedUser!
-            );
-
-            this.view.clearLastInfoMessage();
-
-            this.view.setIsFollower(true);
-            this.view.setFollowersCount(followersCount);
-            this.view.setFolloweesCount(followeesCount);
-        }, 'follow user');
+        await this.updateFollow(
+            this.service.follow(this.view.authToken!, this.view.displayedUser!),
+            'Adding',
+            'follow user',
+            true,
+            event,
+        )
     };
 
     public async unfollowDisplayedUser(
         event: React.MouseEvent
     ): Promise<void> {
+        await this.updateFollow(
+            this.service.unfollow(this.view.authToken!, this.view.displayedUser!),
+            'Removing',
+            'unfollow user',
+            false,
+            event)
+    };
+
+
+    protected async updateFollow(
+        action:  Promise<[followersCount: number, followeesCount: number]>,
+        actionStr: string,
+        actionDetails: string,
+        isFollower: boolean,
+        event: React.MouseEvent,
+    ): Promise<void> {
         event.preventDefault();
         await this.reportFailingAction(async () => {
-            this.view.displayInfoMessage(
-                `Removing ${this.view.displayedUser!.name} from followers...`,
-                200
-            );
+            this.displayMessage(actionStr)
 
-            let [followersCount, followeesCount] = await this.service.unfollow(
-                this.view.authToken!,
-                this.view.displayedUser!
-            );
-
+            console.log('before action')
+            let [followersCount, followeesCount] = await action;
+            console.log('after action')
             this.view.clearLastInfoMessage();
 
-            this.view.setIsFollower(false);
+            this.view.setIsFollower(isFollower);
             this.view.setFollowersCount(followersCount);
             this.view.setFolloweesCount(followeesCount);
-        }, 'unfollow user');
-    };
+        }, actionDetails);
+    }
+
+    protected displayMessage(action: string)
+    {
+        this.view.displayInfoMessage(
+            `${action} ${this.view.displayedUser!.name} from followers...`,
+            0
+        );
+    }
 }
