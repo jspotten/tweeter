@@ -15,7 +15,6 @@ const AppNavbar = () => {
     useToastListener();
 
   const listener: AppNavbarView = {
-    authToken: authToken,
     navigateTo: navigate,
     displayInfoMessage: displayInfoMessage,
     clearLastInfoMessage: clearLastInfoMessage,
@@ -25,8 +24,8 @@ const AppNavbar = () => {
 
   const [presenter] = useState(new AppNavbarPresenter(listener))
 
-  const logOut = async () => {
-    await presenter.logOut();
+  const logout = async () => {
+    await presenter.logout(authToken);
   }
 
   return (
@@ -68,7 +67,7 @@ const AppNavbar = () => {
               <NavLink to="/followers">Followers</NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink id="logout" onClick={logOut} to={location.pathname}>
+              <NavLink id="logout" onClick={logout} to={location.pathname}>
                 Logout
               </NavLink>
             </Nav.Item>

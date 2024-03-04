@@ -3,31 +3,31 @@ import {StatusService} from "../../model/StatusService";
 import {MessageView, Presenter} from "../Presenter";
 
 export interface PostStatusView extends MessageView {
-    post: string,
     setPost: (value: string) => void,
-    currentUser: User | null,
-    authToken: AuthToken | null,
 }
 
 export class PostStatusPresenter extends Presenter<PostStatusView>
 {
-    private service: StatusService;
+    private _service: StatusService | null = null;
 
     public constructor(view: PostStatusView)
     {
         super(view);
-        this.service = new StatusService()
     }
 
-
-    public async submitPost(event: React.MouseEvent)
+    public get service()
     {
-        event.preventDefault();
+        return this._service ? this._service : new StatusService()
+    }
+
+    public async postStatus(post: string, currentUser: User | null,
+                            authToken: AuthToken | null,)
+    {
         await this.reportFailingAction(async () => {
             this.view.displayInfoMessage("Posting status...", 0);
-            let status = new Status(this.view.post, this.view.currentUser!, Date.now());
+            let status = new Status(post, currentUser!, Date.now());
 
-            await this.service.postStatus(this.view.authToken!, status);
+            await this.service.postStatus(authToken!, status);
 
             this.view.clearLastInfoMessage();
             this.view.setPost("");

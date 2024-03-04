@@ -25,7 +25,7 @@ export abstract class Presenter<T extends View> {
             await action();
         } catch (error) {
             this._view.displayErrorMessage(
-                `Failed to ${actionDetails} because of exception: ${error}`
+                `Failed to ${actionDetails} because of exception: ${(error as Error).message}`
             );
         }
     }

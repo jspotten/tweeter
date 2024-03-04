@@ -4,7 +4,11 @@ import useToastListener from "../toaster/ToastListenerHook";
 import {useUserInfoHook} from "../userInfo/UserInfoHook";
 import {PostStatusPresenter, PostStatusView} from "../../presenter/main/PostStatusPresenter";
 
-const PostStatus = () => {
+interface Props {
+    presenter?: PostStatusPresenter;
+}
+
+const PostStatus = (props: Props) => {
     const { displayErrorMessage, displayInfoMessage, clearLastInfoMessage } =
     useToastListener();
 
@@ -16,16 +20,13 @@ const PostStatus = () => {
     };
 
     const listener: PostStatusView = {
-        post: post,
         setPost: setPost,
-        currentUser: currentUser,
-        authToken: authToken,
         displayInfoMessage: displayInfoMessage,
         clearLastInfoMessage: clearLastInfoMessage,
         displayErrorMessage: displayErrorMessage,
     };
 
-    const [presenter] = useState(new PostStatusPresenter(listener));
+    const [presenter] = useState(props.presenter ?? new PostStatusPresenter(listener));
 
     return (
         <form>
@@ -33,6 +34,7 @@ const PostStatus = () => {
                 <textarea
                     className="form-control"
                     id="postStatusTextArea"
+                    aria-label={'post-textarea'}
                     rows={10}
                     placeholder="What's on your mind?"
                     value={post}
@@ -44,15 +46,21 @@ const PostStatus = () => {
             <div className="form-group">
                 <button
                     id="postStatusButton"
+                    aria-label={'post-status'}
                     className="btn btn-md btn-primary me-1"
                     type="button"
                     disabled={checkButtonStatus()}
-                    onClick={(event) => presenter.submitPost(event)}
+                    onClick={(event) =>
+                    {
+                        event.preventDefault();
+                        presenter.postStatus(post, currentUser, authToken)
+                    }}
                 >
                     Post Status
                 </button>
                 <button
                     id="clearStatusButton"
+                    aria-label={'clear-status'}
                     className="btn btn-md btn-secondary"
                     type="button"
                     disabled={checkButtonStatus()}
