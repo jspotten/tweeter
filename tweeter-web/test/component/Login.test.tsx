@@ -10,15 +10,18 @@ import * as m from "ts-mockito"
 
 library.add(fab)
 
+
 describe('Login Component', () => {
     const originalUrl: string = "https://someurl.com";
     const alias: string = "@someAlias";
     const password: string = "myPasword";
 
+
     it('disables sign-in button when first rendered', () => {
         const { signInBtn } = renderLoginAndGetElements("/")
         expect(signInBtn).toBeDisabled()
     })
+
 
     it('enables sign-in button when both the alias and password fields have text', async () => {
         const { signInBtn, aliasField, passwordField, user } = renderLoginAndGetElements("/")
@@ -26,6 +29,7 @@ describe('Login Component', () => {
 
         expect(signInBtn).toBeEnabled();
     })
+
 
     it('disables sign-in button if either the alias or password field is cleared', async () => {
         const { signInBtn, aliasField, passwordField, user } =
@@ -42,6 +46,7 @@ describe('Login Component', () => {
         expect(signInBtn).toBeDisabled();
     })
 
+
     it('calls presenter\'s login method with correct parameters when the sign-in button is pressed', async () => {
         const mockPresenter = m.mock<LoginPresenter>();
         const mockPresenterInstance = m.instance(mockPresenter);
@@ -56,6 +61,7 @@ describe('Login Component', () => {
     })
 });
 
+
 const fillLoginFields = async (
     user: UserEvent,
     aliasField: HTMLElement,
@@ -67,6 +73,7 @@ const fillLoginFields = async (
     await user.type(passwordField, passwordText);
 }
 
+
 const renderLogin = (originalUrl: string, presenter?: LoginPresenter) => {
     return render(
         <MemoryRouter>
@@ -77,6 +84,7 @@ const renderLogin = (originalUrl: string, presenter?: LoginPresenter) => {
             )}
         </MemoryRouter>);
 }
+
 
 const renderLoginAndGetElements = (originalUrl: string, presenter?: LoginPresenter) => {
     const user = userEvent.setup();

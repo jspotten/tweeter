@@ -3,7 +3,6 @@ import {StatusService} from "../../src/model/StatusService";
 import {AuthToken, Status, User} from "tweeter-shared";
 import * as m from 'ts-mockito'
 
-
 describe('PostStatusPresenter', () => {
     let mockPostStatusView: PostStatusView;
     let postStatusPresenter: PostStatusPresenter;
@@ -12,6 +11,7 @@ describe('PostStatusPresenter', () => {
     const authToken = new AuthToken('token', Date.now())
     const post: string = "I'm excited to announce my graduation!";
     const currUser: User = new User("Inigo", 'Montoya', 'pbride', 'https://images.com/pbride.png');
+
 
     beforeEach(() => {
         mockPostStatusView = m.mock<PostStatusView>();
@@ -26,10 +26,12 @@ describe('PostStatusPresenter', () => {
         m.when(postStatusPresenterSpy.service).thenReturn(mockStatusServiceInstance)
     })
 
+
     it('tells the view to display a posting status message', async () => {
         await postStatusPresenter.postStatus(post, currUser, authToken)
         m.verify(mockPostStatusView.displayInfoMessage("Posting status...", 0)).once();
     })
+
 
     it('calls postStatus on the post status service with the correct status string and auth token', async () => {
         await postStatusPresenter.postStatus(post, currUser, authToken)
@@ -37,6 +39,7 @@ describe('PostStatusPresenter', () => {
         let [_authToken, status] = m.capture(mockStatusService.postStatus).last()
         expect(status.post).toEqual(post)
     })
+
 
     it('tells the view, upon successful status posting, to clear the last info message/post and display status posted message', async () => {
         await postStatusPresenter.postStatus(post, currUser, authToken)
@@ -46,6 +49,7 @@ describe('PostStatusPresenter', () => {
 
         m.verify(mockPostStatusView.displayErrorMessage(m.anything())).never()
     })
+
 
     it('tells the view, upon unsuccessful status posting, to display an error message', async () => {
         const errorAction: string = 'An error occurred while posting message';

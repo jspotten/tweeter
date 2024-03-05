@@ -18,6 +18,7 @@ jest.mock("../../src/components/userInfo/UserInfoHook", () => ({
     default: jest.fn(),
 }));
 
+
 describe('PostStatus Component', () => {
     const post: string = "I'm excited to announce my graduation!";
     const currUser: User = new User("Inigo", 'Montoya', 'pbride', 'https://images.com/pbride.png');
@@ -27,6 +28,7 @@ describe('PostStatus Component', () => {
     const mockAuthToken = m.mock<AuthToken>(authToken)
     const mockAuthTokenInstance = m.instance(mockAuthToken)
 
+
     beforeAll(() => {
         (useUserInfoHook as jest.Mock).mockReturnValue({
             currentUser: mockUserInstance,
@@ -34,11 +36,13 @@ describe('PostStatus Component', () => {
         });
     })
 
+
     it('disables post status and clear buttons when first rendered', () => {
         const { postStatusBtn, clearStatusBtn } = renderPostStatusAndGetElements()
         expect(postStatusBtn).toBeDisabled()
         expect(clearStatusBtn).toBeDisabled()
     })
+
 
     it('enables both buttons when the text field has text', async () => {
         const { postStatusBtn, clearStatusBtn, textBoxField, user } =
@@ -48,6 +52,7 @@ describe('PostStatus Component', () => {
         expect(postStatusBtn).toBeEnabled()
         expect(clearStatusBtn).toBeEnabled()
     })
+
 
     it('disables both buttons when the text field is cleared', async () => {
         const { postStatusBtn, clearStatusBtn, textBoxField, user } =
@@ -62,6 +67,7 @@ describe('PostStatus Component', () => {
         expect(postStatusBtn).toBeDisabled()
         expect(clearStatusBtn).toBeDisabled()
     })
+
 
     it('calls presenter\'s postStatus method with correct parameters when the post status button is pressed', async () => {
         const mockPresenter = m.mock<PostStatusPresenter>();
@@ -79,6 +85,7 @@ describe('PostStatus Component', () => {
     })
 });
 
+
 const renderPostStatus = (presenter?: PostStatusPresenter) => {
     return render(
         <MemoryRouter>
@@ -90,6 +97,7 @@ const renderPostStatus = (presenter?: PostStatusPresenter) => {
         </MemoryRouter>
     );
 }
+
 
 const renderPostStatusAndGetElements = (presenter?: PostStatusPresenter) => {
     const user = userEvent.setup();
