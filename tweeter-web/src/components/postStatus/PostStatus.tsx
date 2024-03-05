@@ -1,7 +1,7 @@
 import "./PostStatus.css";
 import { useState } from "react";
 import useToastListener from "../toaster/ToastListenerHook";
-import {useUserInfoHook} from "../userInfo/UserInfoHook";
+import useUserInfoHook from "../userInfo/UserInfoHook";
 import {PostStatusPresenter, PostStatusView} from "../../presenter/main/PostStatusPresenter";
 
 interface Props {

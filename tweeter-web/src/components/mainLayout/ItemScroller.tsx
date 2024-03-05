@@ -1,7 +1,7 @@
 import {useState, useRef, useEffect, ReactNode} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import useToastListener from "../toaster/ToastListenerHook";
-import {useUserInfoHook} from "../userInfo/UserInfoHook";
+import useUserInfoHook from "../userInfo/UserInfoHook";
 import {PagedItemPresenter, PagedItemView} from "../../presenter/PagedItemPresenter";
 
 interface Props<T, U> {

@@ -1,13 +1,13 @@
-import {PostStatusPresenter, PostStatusView} from "../../../src/presenter/main/PostStatusPresenter";
-import {StatusService} from "../../../src/model/StatusService";
+import {PostStatusPresenter, PostStatusView} from "../../src/presenter/main/PostStatusPresenter";
+import {StatusService} from "../../src/model/StatusService";
 import {AuthToken, Status, User} from "tweeter-shared";
 import * as m from 'ts-mockito'
+
 
 describe('PostStatusPresenter', () => {
     let mockPostStatusView: PostStatusView;
     let postStatusPresenter: PostStatusPresenter;
     let mockStatusService: StatusService;
-    let status: Status;
 
     const authToken = new AuthToken('token', Date.now())
     const post: string = "I'm excited to announce my graduation!";
@@ -16,7 +16,6 @@ describe('PostStatusPresenter', () => {
     beforeEach(() => {
         mockPostStatusView = m.mock<PostStatusView>();
         const mockPostStatusViewInstance = m.instance(mockPostStatusView);
-        status = new Status(post, currUser, Date.now())
 
         const postStatusPresenterSpy = m.spy(new PostStatusPresenter(mockPostStatusViewInstance))
         postStatusPresenter = m.instance(postStatusPresenterSpy);
@@ -34,7 +33,9 @@ describe('PostStatusPresenter', () => {
 
     it('calls postStatus on the post status service with the correct status string and auth token', async () => {
         await postStatusPresenter.postStatus(post, currUser, authToken)
-        m.verify(mockStatusService.postStatus(authToken!, status)).once()
+        m.verify(mockStatusService.postStatus(authToken, m.anything())).once()
+        let [_authToken, status] = m.capture(mockStatusService.postStatus).last()
+        expect(status.post).toEqual(post)
     })
 
     it('tells the view, upon successful status posting, to clear the last info message/post and display status posted message', async () => {
@@ -49,12 +50,14 @@ describe('PostStatusPresenter', () => {
     it('tells the view, upon unsuccessful status posting, to display an error message', async () => {
         const errorAction: string = 'An error occurred while posting message';
         const error = new Error(errorAction)
-        m.when(mockStatusService.postStatus(authToken!, status)).thenThrow(error)
+        m.when(mockStatusService.postStatus(authToken, m.anything())).thenThrow(error)
 
         await postStatusPresenter.postStatus(post, currUser, authToken)
-        const errorMsg = `Failed to log user out because of exception: ${errorAction}`
+        const errorMsg = `Failed to post the status because of exception: ${errorAction}`
 
-        m.verify(mockPostStatusView.displayErrorMessage(errorMsg)).once()
+        m.verify(mockPostStatusView.displayErrorMessage(m.anything())).once()
+        let [_error] = m.capture(mockPostStatusView.displayErrorMessage).last()
+        expect(_error).toEqual(errorMsg)
 
         m.verify(mockPostStatusView.clearLastInfoMessage()).never();
         m.verify(mockPostStatusView.setPost("")).never();

@@ -21,7 +21,7 @@ export class PostStatusPresenter extends Presenter<PostStatusView>
     }
 
     public async postStatus(post: string, currentUser: User | null,
-                            authToken: AuthToken | null,)
+                            authToken: AuthToken | null)
     {
         await this.reportFailingAction(async () => {
             this.view.displayInfoMessage("Posting status...", 0);

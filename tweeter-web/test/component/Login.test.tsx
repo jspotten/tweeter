@@ -2,15 +2,19 @@ import { render, screen } from '@testing-library/react'
 import {MemoryRouter} from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import Login from "../../../src/components/authentication/login/Login";
+import Login from "../../src/components/authentication/login/Login";
 import {UserEvent, userEvent} from "@testing-library/user-event";
 import "@testing-library/jest-dom"
-import {LoginPresenter} from "../../../src/presenter/authentication/LoginPresenter";
+import {LoginPresenter} from "../../src/presenter/authentication/LoginPresenter";
 import * as m from "ts-mockito"
 
 library.add(fab)
 
 describe('Login Component', () => {
+    const originalUrl: string = "https://someurl.com";
+    const alias: string = "@someAlias";
+    const password: string = "myPasword";
+
     it('disables sign-in button when first rendered', () => {
         const { signInBtn } = renderLoginAndGetElements("/")
         expect(signInBtn).toBeDisabled()
@@ -42,14 +46,10 @@ describe('Login Component', () => {
         const mockPresenter = m.mock<LoginPresenter>();
         const mockPresenterInstance = m.instance(mockPresenter);
 
-        const originalUrl: string = "https://someurl.com";
-        const alias: string = "@someAlias";
-        const password: string = "myPasword";
         const { signInBtn, aliasField, passwordField, user } =
             renderLoginAndGetElements(originalUrl, mockPresenterInstance);
 
         await fillLoginFields(user, aliasField, alias, passwordField, password);
-
         await user.click(signInBtn);
 
         m.verify(mockPresenter.login(alias, password, originalUrl)).once()

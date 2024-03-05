@@ -6,7 +6,7 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import {AuthFields} from "../AuthFields";
 import {LoginPresenter} from "../../../presenter/authentication/LoginPresenter";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
-import {useUserInfoHook} from "../../userInfo/UserInfoHook";
+import useUserInfoHook from "../../userInfo/UserInfoHook";
 import {AuthToken, User} from "tweeter-shared";
 import {AuthenticationView} from "../../../presenter/authentication/AuthenticationPresenter";
 

@@ -4,7 +4,7 @@ import Login from "./components/authentication/login/Login";
 import Register from "./components/authentication/register/Register";
 import MainLayout from "./components/mainLayout/MainLayout";
 import Toaster from "./components/toaster/Toaster";
-import {useUserInfoHook} from "./components/userInfo/UserInfoHook";
+import useUserInfoHook from "./components/userInfo/UserInfoHook";
 import {FollowingPresenter} from "./presenter/user/FollowingPresenter";
 import {FollowersPresenter} from "./presenter/user/FollowersPresenter";
 import {FeedPresenter} from "./presenter/main/FeedPresenter";
