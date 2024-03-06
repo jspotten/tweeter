@@ -3,7 +3,7 @@ import {Presenter, View} from "../Presenter";
 import {AuthenticateService} from "../../model/AuthenticateService";
 
 export interface AuthenticationView extends View {
-    authenticate: (user: User, authToken: AuthToken) => void,
+    updateUserInfo: (user: User, authToken: AuthToken) => void,
     navigateTo: (url: string) => void
 }
 
@@ -19,7 +19,7 @@ export abstract class AuthenticationPresenter<T> extends Presenter<Authenticatio
     {
         await this.reportFailingAction(async () => {
             let [user, authToken] = await this.validate(...args)
-            this.view.authenticate(user, authToken);
+            this.view.updateUserInfo(user, authToken);
             this.view.navigateTo(url);
         }, this.getItemDetails());
     }

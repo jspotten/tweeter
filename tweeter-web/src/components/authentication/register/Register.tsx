@@ -29,7 +29,7 @@ const Register = () => {
     return !firstName || !lastName || !alias || !password || !imageUrl;
   };
 
-  const authenticate = (user: User, authToken: AuthToken) => {
+  const updateUser = (user: User, authToken: AuthToken) => {
     updateUserInfo(user, user, authToken, rememberMe)
   }
 
@@ -38,7 +38,7 @@ const Register = () => {
     imageUrl: imageUrl,
     setImageUrl: setImageUrl,
     navigateTo: navigate,
-    authenticate: authenticate,
+    updateUserInfo: updateUser,
     displayErrorMessage: displayErrorMessage
   }
 

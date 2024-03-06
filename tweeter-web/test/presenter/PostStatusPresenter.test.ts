@@ -1,6 +1,6 @@
 import {PostStatusPresenter, PostStatusView} from "../../src/presenter/main/PostStatusPresenter";
 import {StatusService} from "../../src/model/StatusService";
-import {AuthToken, Status, User} from "tweeter-shared";
+import {AuthToken, User} from "tweeter-shared";
 import * as m from 'ts-mockito'
 
 describe('PostStatusPresenter', () => {

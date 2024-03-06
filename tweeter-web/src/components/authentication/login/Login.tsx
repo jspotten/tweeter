@@ -27,12 +27,12 @@ const Login = (props: Props) => {
   const rememberMeRef = useRef(rememberMe);
   rememberMeRef.current = rememberMe;
 
-  const authenticate = (user: User, authToken: AuthToken) => {
+  const updateUser = (user: User, authToken: AuthToken) => {
     updateUserInfo(user, user, authToken, rememberMe)
   }
 
   const listener: AuthenticationView = {
-    authenticate: authenticate,
+    updateUserInfo: updateUser,
     navigateTo: navigate,
     displayErrorMessage: displayErrorMessage
   }
@@ -42,8 +42,6 @@ const Login = (props: Props) => {
   const doLogin = async () => {
       await presenter.login(alias, password, props.originalUrl!)
   };
-
-
 
   const checkSubmitButtonStatus = () =>
   {

@@ -50,12 +50,14 @@ export class RegisterPresenter extends AuthenticationPresenter<RegisterView>
         }
     }
 
-    public async register(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array)
+    public async register(firstName: string, lastName: string, alias: string,
+                            password: string, imageBytes: Uint8Array)
     {
         await this.authenticate("/", firstName, lastName, alias, password, imageBytes)
     }
 
-    protected validate(firstName: string, lastName: string, alias: string, password: string, imageBytes: Uint8Array): Promise<[User, AuthToken]> {
+    protected validate(firstName: string, lastName: string, alias: string, password: string,
+                        imageBytes: Uint8Array): Promise<[User, AuthToken]> {
         return this.service.register(
             firstName,
             lastName,
