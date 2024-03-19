@@ -1,6 +1,6 @@
 import {AppNavbarPresenter, AppNavbarView} from "../../src/presenter/main/AppNavbarPresenter";
 import * as m from 'ts-mockito'
-import {AuthenticateService} from "../../src/model/AuthenticateService";
+import {AuthenticateService} from "../../src/model/service/AuthenticateService";
 import {AuthToken} from "tweeter-shared";
 
 

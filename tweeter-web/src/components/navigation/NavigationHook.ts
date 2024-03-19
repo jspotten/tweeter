@@ -1,6 +1,6 @@
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
-import {UserService} from "../../model/UserService";
+import {UserService} from "../../model/service/UserService";
 import {NavigationPresenter, NavigationView} from "../../presenter/main/NavigationPresenter";
 import {useState} from "react";
 
