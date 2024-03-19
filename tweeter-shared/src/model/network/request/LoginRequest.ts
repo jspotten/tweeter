@@ -1,10 +1,5 @@
-export class LoginRequest {
-    username: string;
-    password: string;
+import {AuthenticateRequest} from "./Request";
 
-    public constructor(username: string, password: string)
-    {
-        this.username = username;
-        this.password = password;
-    }
+export class LoginRequest implements AuthenticateRequest{
+    public constructor(public alias: string, public password: string){}
 }

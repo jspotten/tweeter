@@ -1,6 +1,6 @@
 import {AuthToken, FakeData, User} from "tweeter-shared";
 
-export class UserService {
+export class AuthenticateService {
     login = async (
         alias: string,
         password: string
