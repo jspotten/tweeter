@@ -1,22 +1,29 @@
 import { User } from "../../domain/User"
 import { AuthToken } from "../../domain/AuthToken"
+import { TweeterResponse} from "./Response";
 
 interface ResponseJson {
     _success: boolean;
     _message: string;
 }
 
-export class AuthenticateResponse { //extends Response {
+export class AuthenticateResponse implements TweeterResponse {
     private readonly _user: User;
     private readonly _token: AuthToken;
+    readonly _success: boolean;
+    readonly _message: string | undefined;
 
     constructor(
         user: User,
         token: AuthToken,
+        message: string,
+        success: boolean,
+
     ) {
-        // super(success, message);
         this._user = user;
         this._token = token;
+        this._message = message;
+        this._success = success;
     }
 
     get user() {
@@ -25,6 +32,14 @@ export class AuthenticateResponse { //extends Response {
 
     get token() {
         return this._token;
+    }
+
+    get success() {
+        return this._success;
+    }
+
+    get message() {
+        return this._message;
     }
 
     static fromJson(json: JSON): AuthenticateResponse {
@@ -58,8 +73,8 @@ export class AuthenticateResponse { //extends Response {
         return new AuthenticateResponse(
             deserializedUser,
             deserializedToken,
-            // jsonObject._message,
-            // jsonObject._success,
+            jsonObject._message,
+            jsonObject._success,
         );
     }
 }

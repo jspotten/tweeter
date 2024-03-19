@@ -11,7 +11,7 @@ export class AuthenticateService {
         if (user === null) {
             throw new Error("Invalid alias or password");
         }
-
+        // Serialize and deserialize to get token and user
         return [user, FakeData.instance.authToken];
     };
 }

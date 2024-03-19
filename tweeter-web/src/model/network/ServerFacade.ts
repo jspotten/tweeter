@@ -1,17 +1,20 @@
 import {
-    LoginRequest,
-    LogoutRequest,
-    RegisterRequest,
-    PostStatusRequest,
-    GetUserRequest,
-    LoadMoreItemsRequest,
-    FollowRequest,
-    UnfollowRequest,
+    AuthenticateResponse,
     FollowCountRequest,
     FollowerStatusRequest,
-    AuthenticateResponse, User, Status,
+    FollowRequest,
+    GetUserRequest,
+    LoadMoreItemsRequest,
+    LoginRequest,
+    LogoutRequest,
+    PostStatusRequest,
+    RegisterRequest,
+    Status,
+    UnfollowRequest,
+    User,
 } from "tweeter-shared"
-import { ClientCommunicator } from "./ClientCommunicator";
+import {ClientCommunicator} from "./ClientCommunicator";
+import {TweeterResponse} from "tweeter-shared/dist/model/network/response/Response";
 
 export class ServerFacade {
 
@@ -21,16 +24,12 @@ export class ServerFacade {
 
     async login(request: LoginRequest): Promise<AuthenticateResponse> {
         const endpoint = "/service/login";
-        const response: JSON = await this.clientCommunicator.doPost<LoginRequest>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<LoginRequest, AuthenticateResponse>(request, endpoint)
     }
 
-    async logout(request: LogoutRequest): Promise<AuthenticateResponse> {
+    async logout(request: LogoutRequest): Promise<TweeterResponse> {
         const endpoint = "/service/logout";
-        const response: JSON = await this.clientCommunicator.doPost<LogoutRequest>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<LogoutRequest, TweeterResponse>(request, endpoint);
     }
 
     async register(request: RegisterRequest): Promise<AuthenticateResponse> {

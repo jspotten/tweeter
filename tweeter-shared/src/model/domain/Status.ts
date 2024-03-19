@@ -1,6 +1,8 @@
 import { PostSegment, Type } from "./PostSegment";
 import { User } from "./User";
 import moment from "moment";
+import {UserDTO} from "../dto/UserDTO";
+import {StatusDTO} from "../dto/StatusDTO";
 
 export class Status {
   private _post: string;
@@ -273,5 +275,27 @@ export class Status {
 
   public toJson(): string {
     return JSON.stringify(this);
+  }
+
+  public static fromJsonString(json: string | null | undefined): Status | null
+  {
+    return json ? this.fromDTO(JSON.parse(json)) : null;
+  }
+
+  public static fromDTO(dto: StatusDTO | null | undefined): Status | null
+  {
+    return dto ? new Status(
+        dto.post,
+        dto.user,
+        dto.timestamp) : null;
+  }
+
+  public get dto(): StatusDTO {
+    return {
+      post: this.post,
+      user: this.user,
+      timestamp: this.timestamp,
+      segments: this.segments,
+    }
   }
 }
