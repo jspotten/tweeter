@@ -13,7 +13,10 @@ import {
     PostStatusRequest,
     RegisterRequest,
     Status,
-    User, FollowerStatusResponse,
+    User,
+    FollowerStatusResponse,
+    FollowRequest,
+    UnfollowRequest,
 } from "tweeter-shared"
 import {ClientCommunicator} from "./ClientCommunicator";
 
@@ -70,6 +73,16 @@ export class ServerFacade {
 
     async getFollowersCount(request: FollowCountRequest): Promise<FollowCountResponse> {
         return this.getFollowCount(request, "/tweeter/followers-count")
+    }
+
+    async follow(request: FollowRequest): Promise<TweeterResponse> {
+        const endpoint: string = "/tweeter/follow";
+        return await this.clientCommunicator.doPost<FollowRequest, TweeterResponse>(request, endpoint);
+    }
+
+    async unfollow(request: UnfollowRequest): Promise<TweeterResponse> {
+        const endpoint: string = "/tweeter/unfollow";
+        return await this.clientCommunicator.doPost<UnfollowRequest, TweeterResponse>(request, endpoint);
     }
 
     async getFolloweesCount(request: FollowCountRequest): Promise<FollowCountResponse> {

@@ -44,7 +44,7 @@ export class AuthenticateService {
             lastName,
             alias,
             password,
-            userImageBytes,
+            this.getStringBase64Img(userImageBytes),
         )
         const registerResponse
             = await this.facade.register(registerRequest)
@@ -56,8 +56,8 @@ export class AuthenticateService {
         return [registerResponse.user, registerResponse.token];
     };
 
-    // private getStringBase64Img(imgBytes: Uint8Array)
-    // {
-    //     return Buffer.from(imgBytes).toString("base64");
-    // }
+    private getStringBase64Img(imgBytes: Uint8Array)
+    {
+        return Buffer.from(imgBytes).toString("base64");
+    }
 }

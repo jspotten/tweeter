@@ -6,6 +6,6 @@ export class RegisterRequest implements AuthenticateRequest{
         public lastName: string,
         public alias: string,
         public password: string,
-        public userImageBytes: Uint8Array
+        public imageBytes: string
     ){}
 }

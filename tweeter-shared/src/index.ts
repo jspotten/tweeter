@@ -16,6 +16,8 @@ export { GetUserRequest } from "./model/network/request/GetUserRequest"
 export { LoadMoreItemsRequest } from "./model/network/request/LoadMoreItemsRequest"
 export { FollowCountRequest } from "./model/network/request/FollowCountRequest"
 export { FollowerStatusRequest } from "./model/network/request/FollowerStatusRequest"
+export { FollowRequest } from "./model/network/request/FollowRequest"
+export { UnfollowRequest } from "./model/network/request/UnfollowRequest"
 export type { TweeterResponse } from "./model/network/response/Response";
 export { AuthenticateResponse } from "./model/network/response/AuthenticateResponse";
 export { LoadMoreItemsResponse } from "./model/network/response/LoadMoreItemsResponse";
