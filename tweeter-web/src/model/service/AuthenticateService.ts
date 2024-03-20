@@ -1,4 +1,10 @@
-import {AuthToken, LoginRequest, LogoutRequest, RegisterRequest, User} from "tweeter-shared";
+import {
+    AuthToken,
+    LoginRequest,
+    LogoutRequest,
+    RegisterRequest,
+    User
+} from "tweeter-shared";
 import {Buffer} from "buffer";
 import {ServerFacade} from "../network/ServerFacade";
 
@@ -10,19 +16,19 @@ export class AuthenticateService {
         password: string
     ): Promise<[User, AuthToken]> {
         const loginRequest = new LoginRequest(alias, password);
-        const { user, token, message, success }
+        const loginResponse
             = await this.facade.login(loginRequest)
 
-        if (user === null) {
+        if (loginResponse.user === null) {
             throw new Error("Invalid alias or password");
         }
 
-        return [user, token];
+        return [loginResponse.user, loginResponse.token];
     };
 
     public async logout(authToken: AuthToken): Promise<void> {
         const logoutRequest = new LogoutRequest(authToken);
-        const { _message, _success} = await this.facade.logout(logoutRequest)
+        const logoutResponse = await this.facade.logout(logoutRequest)
     };
 
     public async register(
@@ -40,14 +46,14 @@ export class AuthenticateService {
             password,
             userImageBytes,
         )
-        const { user, token, message, success }
+        const registerResponse
             = await this.facade.register(registerRequest)
 
-        if (user === null) {
+        if (registerResponse.user === null) {
             throw new Error("Invalid registration");
         }
 
-        return [user, token];
+        return [registerResponse.user, registerResponse.token];
     };
 
     // private getStringBase64Img(imgBytes: Uint8Array)

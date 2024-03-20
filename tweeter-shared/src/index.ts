@@ -14,10 +14,11 @@ export { RegisterRequest } from "./model/network/request/RegisterRequest"
 export { PostStatusRequest } from "./model/network/request/PostStatusRequest"
 export { GetUserRequest } from "./model/network/request/GetUserRequest"
 export { LoadMoreItemsRequest } from "./model/network/request/LoadMoreItemsRequest"
-export { FollowRequest } from "./model/network/request/FollowRequest"
-export { UnfollowRequest } from "./model/network/request/UnfollowRequest"
 export { FollowCountRequest } from "./model/network/request/FollowCountRequest"
 export { FollowerStatusRequest } from "./model/network/request/FollowerStatusRequest"
 export type { TweeterResponse } from "./model/network/response/Response";
 export { AuthenticateResponse } from "./model/network/response/AuthenticateResponse";
 export { LoadMoreItemsResponse } from "./model/network/response/LoadMoreItemsResponse";
+export type { GetUserResponse } from "./model/network/response/GetUserResponse"
+export { FollowCountResponse } from "./model/network/response/FollowCountResponse"
+export { FollowerStatusResponse } from "./model/network/response/FollowerStatusResponse"

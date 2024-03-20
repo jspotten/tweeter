@@ -9,6 +9,7 @@ export class LoadMoreItemsResponse<T> implements TweeterResponse {
     ) {}
 
     public get items() {
+
         return this._items;
     }
 

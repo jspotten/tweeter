@@ -1,4 +1,10 @@
-import {AuthToken, LoadMoreItemsRequest, PostStatusRequest,Status, User} from "tweeter-shared"
+import {
+    AuthToken,
+    LoadMoreItemsRequest,
+    PostStatusRequest,
+    Status,
+    User
+} from "tweeter-shared"
 import {ServerFacade} from "../network/ServerFacade";
 
 export class StatusService {
@@ -16,9 +22,10 @@ export class StatusService {
             pageSize,
             lastItem,
         )
-        const { items, bool, message, success } = await this.facade.loadMoreFeedItems<Status>(loadMoreItemsRequest)
+        const loadFeedItemsResponse =
+            await this.facade.loadMoreFeedItems<Status>(loadMoreItemsRequest)
 
-        return [items, bool]
+        return [loadFeedItemsResponse.items, loadFeedItemsResponse.bool]
     };
 
     public async loadMoreStoryItems(
@@ -33,9 +40,10 @@ export class StatusService {
             pageSize,
             lastItem,
         )
-        const { items, bool, message, success } = await this.facade.loadMoreStoryItems<Status>(loadMoreItemsRequest)
+        const loadStoryItemsResponse =
+            await this.facade.loadMoreStoryItems<Status>(loadMoreItemsRequest)
 
-        return [items, bool]
+        return [loadStoryItemsResponse.items, loadStoryItemsResponse.bool]
     };
 
     public async postStatus(
@@ -44,6 +52,6 @@ export class StatusService {
     ): Promise<void> {
         // Pause so we can see the logging out message. Remove when connected to the server
         const postStatusRequest = new PostStatusRequest(authToken, newStatus);
-        const { _message, _success} = await this.facade.postStatus(postStatusRequest)
+        const postStatusResponse = await this.facade.postStatus(postStatusRequest)
     };
 }
