@@ -1,5 +1,7 @@
 import {
     AuthenticateResponse,
+    LoadMoreItemsResponse,
+    TweeterResponse,
     FollowCountRequest,
     FollowerStatusRequest,
     FollowRequest,
@@ -14,7 +16,6 @@ import {
     User,
 } from "tweeter-shared"
 import {ClientCommunicator} from "./ClientCommunicator";
-import {TweeterResponse} from "tweeter-shared/dist/model/network/response/Response";
 
 export class ServerFacade {
 
@@ -34,30 +35,22 @@ export class ServerFacade {
 
     async register(request: RegisterRequest): Promise<AuthenticateResponse> {
         const endpoint = "/service/register";
-        const response: JSON = await this.clientCommunicator.doPost<RegisterRequest>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<RegisterRequest, AuthenticateResponse>(request, endpoint);
     }
 
-    async loadMoreFeedItems(request: LoadMoreItemsRequest<Status>): Promise<AuthenticateResponse> {
+    async loadMoreFeedItems<T extends Status | User>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreItemsResponse<T>> {
         const endpoint = "/service/load-feed-items";
-        const response: JSON = await this.clientCommunicator.doPost<LoadMoreItemsRequest<Status>>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<LoadMoreItemsRequest<T>, LoadMoreItemsResponse<T>>(request, endpoint);
     }
 
-    async loadMoreStoryItems(request: LoadMoreItemsRequest<Status>): Promise<AuthenticateResponse> {
+    async loadMoreStoryItems<T extends Status | User>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreItemsResponse<T>> {
         const endpoint = "/service/load-story-items";
-        const response: JSON = await this.clientCommunicator.doPost<LoadMoreItemsRequest<Status>>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<LoadMoreItemsRequest<T>, LoadMoreItemsResponse<T>>(request, endpoint);
     }
 
-    async postStatus(request: PostStatusRequest): Promise<AuthenticateResponse> {
+    async postStatus(request: PostStatusRequest): Promise<TweeterResponse> {
         const endpoint = "/service/post-status";
-        const response: JSON = await this.clientCommunicator.doPost<PostStatusRequest>(request, endpoint);
-
-        return AuthenticateResponse.fromJson(response);
+        return await this.clientCommunicator.doPost<PostStatusRequest, TweeterResponse>(request, endpoint);
     }
 
     async getUser(request: GetUserRequest): Promise<AuthenticateResponse> {

@@ -1,14 +1,24 @@
-import {AuthToken, FakeData, Status, User} from "tweeter-shared"
+import {AuthToken, LoadMoreItemsRequest, PostStatusRequest,Status, User} from "tweeter-shared"
+import {ServerFacade} from "../network/ServerFacade";
 
 export class StatusService {
+    protected facade = new ServerFacade();
+
     public async loadMoreFeedItems(
         authToken: AuthToken,
         user: User,
         pageSize: number,
         lastItem: Status | null
     ): Promise<[Status[], boolean]> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+            authToken,
+            user,
+            pageSize,
+            lastItem,
+        )
+        const { items, bool, message, success } = await this.facade.loadMoreFeedItems<Status>(loadMoreItemsRequest)
+
+        return [items, bool]
     };
 
     public async loadMoreStoryItems(
@@ -17,8 +27,15 @@ export class StatusService {
         pageSize: number,
         lastItem: Status | null
     ): Promise<[Status[], boolean]> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+            authToken,
+            user,
+            pageSize,
+            lastItem,
+        )
+        const { items, bool, message, success } = await this.facade.loadMoreStoryItems<Status>(loadMoreItemsRequest)
+
+        return [items, bool]
     };
 
     public async postStatus(
@@ -26,8 +43,7 @@ export class StatusService {
         newStatus: Status
     ): Promise<void> {
         // Pause so we can see the logging out message. Remove when connected to the server
-        await new Promise((f) => setTimeout(f, 2000));
-
-        // TODO: Call the server to post the status
+        const postStatusRequest = new PostStatusRequest(authToken, newStatus);
+        const { _message, _success} = await this.facade.postStatus(postStatusRequest)
     };
 }

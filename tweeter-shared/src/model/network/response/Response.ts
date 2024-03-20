@@ -17,6 +17,6 @@ export class Response {
 }
 
 export interface TweeterResponse {
-    readonly _success: boolean;
     readonly _message: string | undefined;
+    readonly _success: boolean;
 }
