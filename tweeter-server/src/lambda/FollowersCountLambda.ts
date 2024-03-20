@@ -5,6 +5,6 @@ import {
 import {UserService} from "../model/service/UserService";
 
 export const handler = async (event: FollowCountRequest): Promise<FollowCountResponse> => {
-    const count = await new UserService().getFollowersCount(event.authToken, event.user);
-    return new FollowCountResponse(count, "", true);
+    const [ count, message, success] = await new UserService().getFollowersCount(event.authToken, event.user);
+    return new FollowCountResponse(count, message, success);
 };

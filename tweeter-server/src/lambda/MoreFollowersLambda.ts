@@ -6,7 +6,7 @@ import {
 import {UserService} from "../model/service/UserService";
 
 export const handler = async (event: LoadMoreItemsRequest<User>): Promise<LoadMoreItemsResponse<User>> => {
-    const [users, bool] =
+    const [users, hasMoreItems, message, success] =
         await new UserService().loadMoreFollowers(event.authToken, event.user, event.pageSize, event.lastItem);
-    return new LoadMoreItemsResponse<User>(users, bool, "", true);
+    return new LoadMoreItemsResponse<User>(users, hasMoreItems, message, success);
 };

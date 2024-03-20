@@ -5,7 +5,6 @@ export class UserService {
         authToken: AuthToken,
         alias: string
     ): Promise<User | null> {
-        // TODO: Replace with the result of calling server
         return FakeData.instance.findUserByAlias(alias);
     };
 
@@ -14,10 +13,9 @@ export class UserService {
         user: User,
         pageSize: number,
         lastItem: User | null
-    ): Promise<[User[], boolean]>
+    ): Promise<[User[], boolean, string, boolean]>
     {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getPageOfUsers(lastItem, pageSize, user);
+        return [...FakeData.instance.getPageOfUsers(lastItem, pageSize, user), "Successful Loading of More Followers", true];
     }
 
     public async loadMoreFollowees(
@@ -25,64 +23,50 @@ export class UserService {
         user: User,
         pageSize: number,
         lastItem: User | null
-    ): Promise<[User[], boolean]>
+    ): Promise<[User[], boolean, string, boolean]>
     {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getPageOfUsers(lastItem, pageSize, user);
+        return [...FakeData.instance.getPageOfUsers(lastItem, pageSize, user), "Successful Loading of More Followees", true];
     };
 
     public async follow(
         authToken: AuthToken,
         userToFollow: User
-    ): Promise<[followersCount: number, followeesCount: number]> {
+    ): Promise<[string, boolean]> {
         // Pause so we can see the following message. Remove when connected to the server
         await new Promise((f) => setTimeout(f, 2000));
 
-        // TODO: Call the server
-
-        let followersCount = await this.getFollowersCount(authToken, userToFollow);
-        let followeesCount = await this.getFolloweesCount(authToken, userToFollow);
-
-        return [followersCount, followeesCount];
+        return [`Successful Following of ${userToFollow}` , true];
     };
 
     public async unfollow(
         authToken: AuthToken,
         userToUnfollow: User
-    ): Promise<[followersCount: number, followeesCount: number]> {
+    ): Promise<[string, boolean]> {
         // Pause so we can see the unfollowing message. Remove when connected to the server
         await new Promise((f) => setTimeout(f, 2000));
 
-        // TODO: Call the server
-
-        let followersCount = await this.getFollowersCount(authToken, userToUnfollow);
-        let followeesCount = await this.getFolloweesCount(authToken, userToUnfollow);
-
-        return [followersCount, followeesCount];
+        return [`Successful Following of ${userToUnfollow}`, true];
     };
 
     public async getFollowersCount(
         authToken: AuthToken,
         user: User
-    ): Promise<number> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getFollowersCount(user);
+    ): Promise<[number, string, boolean]> {
+        return [await FakeData.instance.getFollowersCount(user), "Successful Followers Count Retrieval", true];
     };
 
     public async getFolloweesCount(
         authToken: AuthToken,
         user: User
-    ): Promise<number> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.getFolloweesCount(user);
+    ): Promise<[number, string, boolean]> {
+        return [await FakeData.instance.getFollowersCount(user), "Successful Followees Count Retrieval", true];
     };
 
     public async getIsFollowerStatus(
         authToken: AuthToken,
         user: User,
         selectedUser: User
-    ): Promise<boolean> {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.isFollower();
+    ): Promise<[boolean, string, boolean]> {
+        return [FakeData.instance.isFollower(), "Successful Retrieval of Follow Status", true];
     };
 }
