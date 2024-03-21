@@ -19,19 +19,19 @@ export class AuthenticateService {
         let loginResponse
             = await this.facade.login(loginRequest)
 
-        const user = User.fromJsonString(JSON.stringify(loginResponse))
-        const token = AuthToken.fromJsonString(JSON.stringify(loginResponse))
+        const user = User.fromJson(JSON.stringify(loginResponse.user))
+        const token = AuthToken.fromJson(JSON.stringify(loginResponse.token))
 
         if (user === null || token === null) {
             throw new Error("Invalid alias or password");
         }
-        console.log(user, token)
+
         return [user, token];
     };
 
     public async logout(authToken: AuthToken): Promise<void> {
         const logoutRequest = new LogoutRequest(authToken);
-        const logoutResponse = await this.facade.logout(logoutRequest)
+        const logoutResponse = await this.facade.logout(logoutRequest);
     };
 
     public async register(
@@ -52,11 +52,14 @@ export class AuthenticateService {
         const registerResponse
             = await this.facade.register(registerRequest)
 
-        if (registerResponse.user === null) {
+        const user = User.fromJson(JSON.stringify(registerResponse.user))
+        const token = AuthToken.fromJson(JSON.stringify(registerResponse.token))
+
+        if (user === null || token === null) {
             throw new Error("Invalid registration");
         }
 
-        return [registerResponse.user, registerResponse.token];
+        return [user, token];
     };
 
     private getStringBase64Img(imgBytes: Uint8Array)

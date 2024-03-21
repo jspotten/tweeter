@@ -28,7 +28,8 @@ export class ServerFacade {
 
     async login(request: LoginRequest): Promise<AuthenticateResponse> {
         const endpoint: string = "/tweeter/login";
-        return await this.clientCommunicator.doPost<LoginRequest, AuthenticateResponse>(request, endpoint)
+        const response = await this.clientCommunicator.doPost<LoginRequest, AuthenticateResponse>(request, endpoint)
+        return AuthenticateResponse.fromJson(response)
     }
 
     async logout(request: LogoutRequest): Promise<TweeterResponse> {
@@ -38,7 +39,8 @@ export class ServerFacade {
 
     async register(request: RegisterRequest): Promise<AuthenticateResponse> {
         const endpoint: string = "/tweeter/register";
-        return await this.clientCommunicator.doPost<RegisterRequest, AuthenticateResponse>(request, endpoint);
+        const response = await this.clientCommunicator.doPost<RegisterRequest, AuthenticateResponse>(request, endpoint);
+        return AuthenticateResponse.fromJson(response)
     }
 
     async loadMoreFeedItems<T extends Status>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreItemsResponse<T>> {

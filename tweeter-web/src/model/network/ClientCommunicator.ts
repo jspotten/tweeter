@@ -21,7 +21,7 @@ export class ClientCommunicator {
             const resp: Response = await fetch(url, request);
             if (resp.ok) {
                 const response: U = await resp.json()
-                return response as U;
+                return response;
             } else {
                 const error = await resp.json();
                 throw new Error(error.errorMessage);

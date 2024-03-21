@@ -42,7 +42,7 @@ export class AuthenticateResponse implements TweeterResponse {
         return this._message;
     }
 
-    static fromJson(json: JSON): AuthenticateResponse {
+    static fromJson(json: AuthenticateResponse): AuthenticateResponse {
         interface AuthenticateResponseJson extends ResponseJson {
             _user: JSON;
             _token: JSON;
