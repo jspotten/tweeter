@@ -16,14 +16,17 @@ export class AuthenticateService {
         password: string
     ): Promise<[User, AuthToken]> {
         const loginRequest = new LoginRequest(alias, password);
-        const loginResponse
+        let loginResponse
             = await this.facade.login(loginRequest)
 
-        if (loginResponse.user === null) {
+        const user = User.fromJsonString(JSON.stringify(loginResponse))
+        const token = AuthToken.fromJsonString(JSON.stringify(loginResponse))
+
+        if (user === null || token === null) {
             throw new Error("Invalid alias or password");
         }
-
-        return [loginResponse.user, loginResponse.token];
+        console.log(user, token)
+        return [user, token];
     };
 
     public async logout(authToken: AuthToken): Promise<void> {

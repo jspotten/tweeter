@@ -12,6 +12,7 @@ export class ClientCommunicator {
             method: "post",
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Origin": "*",
             }),
             body: JSON.stringify(req),
         };
@@ -19,7 +20,8 @@ export class ClientCommunicator {
         try {
             const resp: Response = await fetch(url, request);
             if (resp.ok) {
-                return await resp.json();
+                const response: U = await resp.json()
+                return response as U;
             } else {
                 const error = await resp.json();
                 throw new Error(error.errorMessage);
