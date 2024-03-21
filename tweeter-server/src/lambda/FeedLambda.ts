@@ -1,20 +1,21 @@
 import {
-    LoadMoreItemsRequest,
-    LoadMoreItemsResponse,
-    Status,
+    LoadMoreStatusesResponse,
+    LoadMoreStatusesRequest
 } from "tweeter-shared";
 import { StatusService } from "../model/service/StatusService";
 
-export const handler = async (event: LoadMoreItemsRequest<Status>): Promise<LoadMoreItemsResponse<Status>> => {
+export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> => {
     try {
-        if(!event.authToken || !event.user || !event.pageSize || !event.lastItem)
+        const request = event.fromJson(event);
+
+        if(!request.authToken || !request.user || !request.pageSize || !request.lastItem)
         {
             throw new Error("[Bad Request]")
         }
 
         let [statuses, hasMoreItems, message, success] =
-            await new StatusService().loadMoreFeedItems(event.authToken, event.user, event.pageSize, event.lastItem);
-        return new LoadMoreItemsResponse<Status>(statuses, hasMoreItems, message, success);
+            await new StatusService().loadMoreFeedItems(request.authToken, request.user, request.pageSize, request.lastItem);
+        return new LoadMoreStatusesResponse(statuses, hasMoreItems, message, success);
     }
     catch (error) {
         throw new Error(`[Internal Server Error]: ${error}`)

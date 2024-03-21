@@ -1,9 +1,9 @@
 import {LoadMoreItemsResponse, ResponseJson} from "./LoadMoreItemsResponse";
-import {Status} from "../../domain/Status";
+import {User} from "../../domain/User";
 
-export class LoadMoreUsersResponse extends LoadMoreItemsResponse<Status, LoadMoreUsersResponse> {
+export class LoadMoreUsersResponse extends LoadMoreItemsResponse<User, LoadMoreUsersResponse> {
     public constructor(
-        items: Status[],
+        items: User[],
         hasMoreItems: boolean,
         message: string,
         success: boolean)
@@ -11,7 +11,7 @@ export class LoadMoreUsersResponse extends LoadMoreItemsResponse<Status, LoadMor
         super(items, hasMoreItems, message, success);
     }
 
-    public fromJson(json: LoadMoreItemsResponse<Status, LoadMoreUsersResponse>): LoadMoreUsersResponse
+    public fromJson(json: LoadMoreItemsResponse<User, LoadMoreUsersResponse>): LoadMoreUsersResponse
     {
         interface LoadMoreItemsResponseJson extends ResponseJson {
             _items: JSON[];
@@ -20,11 +20,11 @@ export class LoadMoreUsersResponse extends LoadMoreItemsResponse<Status, LoadMor
 
         const jsonObject: LoadMoreItemsResponseJson =
             json as unknown as LoadMoreItemsResponseJson;
-        const deserializedItems: Status[] = []
+        const deserializedItems: User[] = []
         for(let item in jsonObject._items)
         {
             let itemJson = jsonObject._items[item];
-            let deserializedStatus = Status.fromJson(JSON.stringify(itemJson));
+            let deserializedStatus = User.fromJson(JSON.stringify(itemJson));
             if(deserializedStatus)
                 deserializedItems.push(deserializedStatus)
         }

@@ -50,7 +50,6 @@ export class StatusService {
         authToken: AuthToken,
         newStatus: Status
     ): Promise<void> {
-        // Pause so we can see the logging out message. Remove when connected to the server
         const postStatusRequest = new PostStatusRequest(authToken, newStatus);
         const postStatusResponse = await this.facade.postStatus(postStatusRequest)
     };

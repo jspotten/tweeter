@@ -7,7 +7,7 @@ import {
     FollowCountResponse,
     FollowerStatusRequest,
     GetUserRequest,
-    LoadMoreItemsRequest,
+    Request,
     LoadMoreStatusesResponse,
     LoadMoreUsersResponse,
     LoginRequest,
@@ -18,7 +18,7 @@ import {
     User,
     FollowerStatusResponse,
     FollowRequest,
-    UnfollowRequest,
+    UnfollowRequest, LoadMoreStatusesRequest, LoadMoreUsersRequest,
 } from "tweeter-shared"
 import {ClientCommunicator} from "./ClientCommunicator";
 
@@ -45,15 +45,15 @@ export class ServerFacade {
         return AuthenticateResponse.fromJson(response)
     }
 
-    async loadMoreFeedItems<T extends Status>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreStatusesResponse> {
+    async loadMoreFeedItems<T extends Status>(request: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> {
         const response: LoadMoreItemsResponse<T, LoadMoreStatusesResponse>
-            = await this.loadMoreItems<T, LoadMoreStatusesResponse>(request, "/tweeter/feed");
+            = await this.loadMoreItems<T, LoadMoreStatusesResponse, LoadMoreStatusesRequest>(request, "/tweeter/feed");
         return response.fromJson(response)
     }
 
-    async loadMoreStoryItems<T extends Status>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreStatusesResponse> {
+    async loadMoreStoryItems<T extends Status>(request: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> {
         const response: LoadMoreItemsResponse<T, LoadMoreStatusesResponse>
-            =  await this.loadMoreItems<T, LoadMoreStatusesResponse>(request, "/tweeter/story");
+            =  await this.loadMoreItems<T, LoadMoreStatusesResponse, LoadMoreStatusesRequest>(request, "/tweeter/story");
         return response.fromJson(response)
     }
 
@@ -67,20 +67,20 @@ export class ServerFacade {
         return await this.clientCommunicator.doPost<GetUserRequest, GetUserResponse>(request, endpoint);
     }
 
-    async loadMoreFollowers<T extends User>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreUsersResponse> {
+    async loadMoreFollowers<T extends User>(request: LoadMoreUsersRequest): Promise<LoadMoreUsersResponse> {
         const response: LoadMoreItemsResponse<T, LoadMoreUsersResponse>
-            = await this.loadMoreItems<T, LoadMoreStatusesResponse>(request, "/tweeter/followers");
+            = await this.loadMoreItems<T, LoadMoreUsersResponse, LoadMoreUsersRequest>(request, "/tweeter/followers");
         return response.fromJson(response);
     }
 
-    async loadMoreFollowees<T extends User>(request: LoadMoreItemsRequest<T>): Promise<LoadMoreUsersResponse> {
+    async loadMoreFollowees<T extends User>(request: LoadMoreUsersRequest): Promise<LoadMoreUsersResponse> {
         const response: LoadMoreItemsResponse<T, LoadMoreUsersResponse>
-            = await this.loadMoreItems<T, LoadMoreStatusesResponse>(request, "/tweeter/followees");
+            = await this.loadMoreItems<T, LoadMoreUsersResponse, LoadMoreUsersRequest>(request, "/tweeter/followees");
         return response.fromJson(response);
     }
 
-    async loadMoreItems<T extends Status | User, U>(request: LoadMoreItemsRequest<T>, endpoint: string): Promise<LoadMoreItemsResponse<T, U>> {
-        return await this.clientCommunicator.doPost<LoadMoreItemsRequest<T>, LoadMoreItemsResponse<T, U>>(request, endpoint);
+    async loadMoreItems<T extends Status | User, U, V extends Request>(request: V, endpoint: string): Promise<LoadMoreItemsResponse<T, U>> {
+        return await this.clientCommunicator.doPost<V, LoadMoreItemsResponse<T, U>>(request, endpoint);
     }
 
     async getFollowersCount(request: FollowCountRequest): Promise<FollowCountResponse> {
