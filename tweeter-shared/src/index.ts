@@ -24,3 +24,5 @@ export { LoadMoreItemsResponse } from "./model/network/response/LoadMoreItemsRes
 export type { GetUserResponse } from "./model/network/response/GetUserResponse"
 export { FollowCountResponse } from "./model/network/response/FollowCountResponse"
 export { FollowerStatusResponse } from "./model/network/response/FollowerStatusResponse"
+export { LoadMoreStatusesResponse } from "./model/network/response/LoadMoreStatusesResponse"
+export { LoadMoreUsersResponse } from "./model/network/response/LoadMoreUsersResponse"

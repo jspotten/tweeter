@@ -1,9 +1,14 @@
 import {TweeterResponse} from "./Response";
 
-export class LoadMoreItemsResponse<T> implements TweeterResponse {
-    public constructor(
-        private readonly _items: T[],
-        private readonly _bool: boolean,
+export interface ResponseJson {
+    _success: boolean;
+    _message: string;
+}
+
+export abstract class LoadMoreItemsResponse<U, T> implements TweeterResponse {
+    protected constructor(
+        private readonly _items: U[],
+        private readonly _hasMoreItems: boolean,
         readonly _message: string,
         readonly _success: boolean,
     ) {}
@@ -14,7 +19,7 @@ export class LoadMoreItemsResponse<T> implements TweeterResponse {
     }
 
     public get bool() {
-        return this._bool;
+        return this._hasMoreItems;
     }
 
     public get message() {
@@ -24,4 +29,6 @@ export class LoadMoreItemsResponse<T> implements TweeterResponse {
     public get success() {
         return this._success;
     }
+
+    public abstract fromJson(json: LoadMoreItemsResponse<U, T>): T;
 }
