@@ -18,4 +18,13 @@ export class FollowCountResponse implements TweeterResponse {
     public get success() {
         return this._success;
     }
+
+    static fromJson(response: FollowCountResponse)
+    {
+        return new FollowCountResponse(
+            response._count,
+            response._message,
+            response._success,
+        )
+    }
 }

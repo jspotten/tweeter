@@ -33,13 +33,15 @@ export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status>{
                 JSON.stringify(jsonObject.user)
             );
         }
-        // set default as null and if object.lastItem not null then deserialize
-        const deserializedLastItem = Status.fromJson(JSON.stringify(jsonObject.lastItem))
-        if (deserializedLastItem === null) {
-            throw new Error(
-                "LoadMoreStatusesRequest, could not deserialize lastItem with json:\n" +
-                JSON.stringify(jsonObject.lastItem)
-            );
+        let deserializedLastItem = null;
+        if (request.lastItem !== null) {
+            deserializedLastItem = Status.fromJson(JSON.stringify(jsonObject.lastItem));
+            if(deserializedLastItem === null) {
+                throw new Error(
+                    "LoadMoreStatusesRequest, could not deserialize lastItem with json:\n" +
+                    JSON.stringify(jsonObject.lastItem)
+                );
+            }
         }
 
         return new LoadMoreStatusesRequest(

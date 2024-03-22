@@ -1,9 +1,9 @@
 import {
     AuthToken,
-    FollowCountRequest,
+    FollowCountRequest, FollowCountResponse,
     FollowerStatusRequest, FollowRequest,
     GetUserRequest,
-    LoadMoreItemsRequest, LoadMoreUsersRequest, UnfollowRequest,
+    LoadMoreUsersRequest, UnfollowRequest,
     User
 } from "tweeter-shared";
 import {ServerFacade} from "../network/ServerFacade";
@@ -89,7 +89,8 @@ export class UserService {
         const followersCountRequest = new FollowCountRequest(authToken, user);
         const followersCountResponse
             = await this.facade.getFollowersCount(followersCountRequest)
-        return followersCountResponse.count
+        return FollowCountResponse.fromJson(followersCountResponse).count;
+
     };
 
     public async getFolloweesCount(
@@ -99,7 +100,7 @@ export class UserService {
         const followeesCountRequest = new FollowCountRequest(authToken, user);
         const followeesCountResponse
             = await this.facade.getFolloweesCount(followeesCountRequest);
-        return followeesCountResponse.count;
+        return FollowCountResponse.fromJson(followeesCountResponse).count;
     };
 
     public async getIsFollowerStatus(

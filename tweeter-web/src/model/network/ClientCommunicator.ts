@@ -23,6 +23,7 @@ export class ClientCommunicator {
                 const response: U = await resp.json()
                 return response;
             } else {
+                console.log("hello")
                 const error = await resp.json();
                 throw new Error(error.errorMessage);
             }

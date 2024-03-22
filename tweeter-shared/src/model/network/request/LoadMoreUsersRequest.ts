@@ -17,27 +17,27 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
         const jsonObject: LoadMoreItemsRequestJson =
             request as unknown as LoadMoreItemsRequestJson;
 
-        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken))
+        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject.authToken))
         if (deserializedToken === null) {
             throw new Error(
                 "LoadMoreUsersRequest, could not deserialize authToken with json:\n" +
-                JSON.stringify(jsonObject._authToken)
+                JSON.stringify(jsonObject.authToken)
             );
         }
 
-        const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user))
+        const deserializedUser = User.fromJson(JSON.stringify(jsonObject.user))
         if (deserializedUser === null) {
             throw new Error(
                 "LoadMoreUsersRequest, could not deserialize user with json:\n" +
-                JSON.stringify(jsonObject._user)
+                JSON.stringify(jsonObject.user)
             );
         }
 
-        const deserializedLastItem = User.fromJson(JSON.stringify(jsonObject._lastItem))
+        const deserializedLastItem = User.fromJson(JSON.stringify(jsonObject.lastItem))
         if (deserializedLastItem === null) {
             throw new Error(
                 "LoadMoreUsersRequest, could not deserialize lastItem with json:\n" +
-                JSON.stringify(jsonObject._lastItem)
+                JSON.stringify(jsonObject.lastItem)
             );
         }
 

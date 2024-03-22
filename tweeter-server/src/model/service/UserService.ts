@@ -59,7 +59,7 @@ export class UserService {
         authToken: AuthToken,
         user: User
     ): Promise<[number, string, boolean]> {
-        return [await FakeData.instance.getFollowersCount(user), "Successful Followees Count Retrieval", true];
+        return [await FakeData.instance.getFolloweesCount(user), "Successful Followees Count Retrieval", true];
     };
 
     public async getIsFollowerStatus(
