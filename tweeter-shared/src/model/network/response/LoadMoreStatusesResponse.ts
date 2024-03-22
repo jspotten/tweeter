@@ -1,7 +1,7 @@
 import {LoadMoreItemsResponse, ResponseJson} from "./LoadMoreItemsResponse";
 import {Status} from "../../domain/Status";
 
-export class LoadMoreStatusesResponse extends LoadMoreItemsResponse<Status, LoadMoreStatusesResponse> {
+export class LoadMoreStatusesResponse extends LoadMoreItemsResponse<Status> {
     public constructor(
         items: Status[],
         hasMoreItems: boolean,
@@ -11,7 +11,7 @@ export class LoadMoreStatusesResponse extends LoadMoreItemsResponse<Status, Load
         super(items, hasMoreItems, message, success);
     }
 
-    public fromJson(json: LoadMoreItemsResponse<Status, LoadMoreStatusesResponse>): LoadMoreStatusesResponse
+    static fromJson(json: LoadMoreItemsResponse<Status>): LoadMoreStatusesResponse
     {
         interface LoadMoreItemsResponseJson extends ResponseJson {
             _items: JSON[];

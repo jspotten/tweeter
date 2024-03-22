@@ -5,10 +5,10 @@ import {Status} from "../../domain/Status";
 
 
 export interface LoadMoreItemsRequestJson {
-    _authToken: JSON,
-    _user: JSON,
-    _pageSize: JSON,
-    _lastItem: JSON
+    authToken: JSON,
+    user: JSON,
+    pageSize: JSON,
+    lastItem: JSON
 }
 
 export class LoadMoreItemsRequest<U extends Status | User> implements LoadItemsRequest<U> {

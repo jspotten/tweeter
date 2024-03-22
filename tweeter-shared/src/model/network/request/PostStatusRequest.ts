@@ -21,7 +21,7 @@ export class PostStatusRequest implements Request {
         const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken))
         if (deserializedToken === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize authToken with json:\n" +
+                "PostStatusRequest, could not deserialize authToken with json:\n" +
                 JSON.stringify(jsonObject._authToken)
             );
         }
@@ -29,7 +29,7 @@ export class PostStatusRequest implements Request {
         const deserializedNewStatus = Status.fromJson(JSON.stringify(jsonObject._newStatus))
         if (deserializedNewStatus === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize newStatus with json:\n" +
+                "PostStatusRequest, could not deserialize newStatus with json:\n" +
                 JSON.stringify(jsonObject._newStatus)
             );
         }

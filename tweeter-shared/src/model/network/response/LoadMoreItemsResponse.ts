@@ -5,7 +5,7 @@ export interface ResponseJson {
     _message: string;
 }
 
-export abstract class LoadMoreItemsResponse<U, T> implements TweeterResponse {
+export abstract class LoadMoreItemsResponse<U> implements TweeterResponse {
     protected constructor(
         private readonly _items: U[],
         private readonly _hasMoreItems: boolean,
@@ -29,6 +29,4 @@ export abstract class LoadMoreItemsResponse<U, T> implements TweeterResponse {
     public get success() {
         return this._success;
     }
-
-    public abstract fromJson(json: LoadMoreItemsResponse<U, T>): T;
 }

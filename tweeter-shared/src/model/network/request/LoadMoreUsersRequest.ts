@@ -12,7 +12,7 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
         super(authToken, user, pageSize, lastItem);
     }
 
-    public fromJson(request: LoadMoreUsersRequest): LoadMoreUsersRequest
+    static fromJson(request: LoadMoreUsersRequest): LoadMoreUsersRequest
     {
         const jsonObject: LoadMoreItemsRequestJson =
             request as unknown as LoadMoreItemsRequestJson;
@@ -20,7 +20,7 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
         const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken))
         if (deserializedToken === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize authToken with json:\n" +
+                "LoadMoreUsersRequest, could not deserialize authToken with json:\n" +
                 JSON.stringify(jsonObject._authToken)
             );
         }
@@ -28,7 +28,7 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
         const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user))
         if (deserializedUser === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize user with json:\n" +
+                "LoadMoreUsersRequest, could not deserialize user with json:\n" +
                 JSON.stringify(jsonObject._user)
             );
         }
@@ -36,7 +36,7 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
         const deserializedLastItem = User.fromJson(JSON.stringify(jsonObject._lastItem))
         if (deserializedLastItem === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize lastItem with json:\n" +
+                "LoadMoreUsersRequest, could not deserialize lastItem with json:\n" +
                 JSON.stringify(jsonObject._lastItem)
             );
         }

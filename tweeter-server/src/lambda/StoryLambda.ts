@@ -6,7 +6,7 @@ import { StatusService } from "../model/service/StatusService";
 
 export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> => {
     try {
-        const request = event.fromJson(event);
+        const request = LoadMoreStatusesRequest.fromJson(event);
 
         if(!request.authToken || !request.user || !request.pageSize || !request.lastItem)
         {

@@ -18,27 +18,27 @@ export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status>{
         const jsonObject: LoadMoreItemsRequestJson =
             request as unknown as LoadMoreItemsRequestJson;
 
-        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject._authToken))
+        const deserializedToken = AuthToken.fromJson(JSON.stringify(jsonObject.authToken))
         if (deserializedToken === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize authToken with json:\n" +
-                JSON.stringify(jsonObject._authToken)
+                "LoadMoreStatusesRequest, could not deserialize authToken with json:\n" +
+                JSON.stringify(jsonObject.authToken)
             );
         }
 
-        const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user))
+        const deserializedUser = User.fromJson(JSON.stringify(jsonObject.user))
         if (deserializedUser === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize user with json:\n" +
-                JSON.stringify(jsonObject._user)
+                "LoadMoreStatusesRequest, could not deserialize user with json:\n" +
+                JSON.stringify(jsonObject.user)
             );
         }
-
-        const deserializedLastItem = Status.fromJson(JSON.stringify(jsonObject._lastItem))
+        // set default as null and if object.lastItem not null then deserialize
+        const deserializedLastItem = Status.fromJson(JSON.stringify(jsonObject.lastItem))
         if (deserializedLastItem === null) {
             throw new Error(
-                "AuthenticateResponse, could not deserialize lastItem with json:\n" +
-                JSON.stringify(jsonObject._lastItem)
+                "LoadMoreStatusesRequest, could not deserialize lastItem with json:\n" +
+                JSON.stringify(jsonObject.lastItem)
             );
         }
 

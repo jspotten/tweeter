@@ -6,7 +6,7 @@ import { UserService } from "../model/service/UserService";
 
 export const handler = async (event: LoadMoreUsersRequest): Promise<LoadMoreUsersResponse> => {
     try {
-        const request = event.fromJson(event);
+        const request = LoadMoreUsersRequest.fromJson(event);
 
         if(!request.authToken || !request.user || !request.pageSize || !request.lastItem)
         {
