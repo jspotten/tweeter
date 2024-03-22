@@ -54,7 +54,6 @@ export class ServerFacade {
     async loadMoreStoryItems<T extends Status>(request: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> {
         const response: LoadMoreStatusesResponse
             =  await this.loadMoreItems<T, LoadMoreStatusesRequest, LoadMoreStatusesResponse>(request, "/tweeter/story");
-        console.log(LoadMoreStatusesResponse.fromJson(response))
         return LoadMoreStatusesResponse.fromJson(response)
     }
 

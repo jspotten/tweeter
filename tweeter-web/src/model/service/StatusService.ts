@@ -1,6 +1,6 @@
 import {
     AuthToken,
-    LoadMoreItemsRequest, LoadMoreStatusesRequest,
+    LoadMoreStatusesRequest,
     PostStatusRequest,
     Status,
     User
@@ -24,7 +24,6 @@ export class StatusService {
         )
         const loadFeedItemsResponse =
             await this.facade.loadMoreFeedItems<Status>(loadMoreItemsRequest)
-
         return [loadFeedItemsResponse.items, loadFeedItemsResponse.bool]
     };
 
