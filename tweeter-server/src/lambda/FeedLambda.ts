@@ -8,7 +8,7 @@ export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreS
     try {
         const request = LoadMoreStatusesRequest.fromJson(event);
 
-        if(!request.authToken || !request.user || !request.pageSize || !request.lastItem)
+        if(!request.authToken || !request.user || !request.pageSize)
         {
             throw new Error("[Bad Request]")
         }

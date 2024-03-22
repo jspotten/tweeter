@@ -41,7 +41,6 @@ export class StatusService {
         )
         const loadStoryItemsResponse =
             await this.facade.loadMoreStoryItems<Status>(loadMoreItemsRequest)
-
         return [loadStoryItemsResponse.items, loadStoryItemsResponse.bool]
     };
 

@@ -89,9 +89,7 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
         await this.reportFailingAction(async () => {
             this.displayMessage(actionStr)
 
-            console.log('before action')
             let [followersCount, followeesCount] = await action;
-            console.log('after action')
             this.view.clearLastInfoMessage();
 
             this.view.setIsFollower(isFollower);

@@ -18,4 +18,13 @@ export class FollowerStatusResponse implements TweeterResponse{
     public get success() {
         return this._success;
     }
+
+    static fromJson(response: FollowerStatusResponse)
+    {
+        return new FollowerStatusResponse(
+            response._isFollowing,
+            response._message,
+            response._success,
+        )
+    }
 }

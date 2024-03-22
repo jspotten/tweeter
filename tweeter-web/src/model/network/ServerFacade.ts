@@ -107,6 +107,7 @@ export class ServerFacade {
 
     async getIsFollowerStatus(request: FollowerStatusRequest): Promise<FollowerStatusResponse> {
         const endpoint: string = "/tweeter/follower-status";
-        return await this.clientCommunicator.doPost<FollowerStatusRequest, FollowerStatusResponse>(request, endpoint);
+        const response = await this.clientCommunicator.doPost<FollowerStatusRequest, FollowerStatusResponse>(request, endpoint);
+        return FollowerStatusResponse.fromJson(response);
     }
 }

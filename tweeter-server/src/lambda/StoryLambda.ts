@@ -8,7 +8,7 @@ export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreS
     try {
         const request = LoadMoreStatusesRequest.fromJson(event);
 
-        if(!request.authToken || !request.user || !request.pageSize || !request.lastItem)
+        if(!request.authToken || !request.user || !request.pageSize)
         {
             throw new Error("[Bad Request]");
         }
@@ -17,8 +17,7 @@ export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreS
             await new StatusService().loadMoreStoryItems(request.authToken, request.user, request.pageSize, request.lastItem);
         return new LoadMoreStatusesResponse(statuses, hasMoreItems, message, success);
     }
-    catch (error)
-    {
+    catch (error) {
         throw new Error(`[Internal Server Error]: ${error}`);
     }
 };
