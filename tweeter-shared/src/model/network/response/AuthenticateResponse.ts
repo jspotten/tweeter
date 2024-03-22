@@ -42,14 +42,14 @@ export class AuthenticateResponse implements TweeterResponse {
         return this._message;
     }
 
-    static fromJson(json: AuthenticateResponse): AuthenticateResponse {
+    static fromJson(response: AuthenticateResponse): AuthenticateResponse {
         interface AuthenticateResponseJson extends ResponseJson {
             _user: JSON;
             _token: JSON;
         }
 
         const jsonObject: AuthenticateResponseJson =
-            json as unknown as AuthenticateResponseJson;
+            response as unknown as AuthenticateResponseJson;
         const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user));
 
         if (deserializedUser === null) {

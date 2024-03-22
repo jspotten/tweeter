@@ -2,7 +2,7 @@ import { User } from "../../domain/User";
 import {LoadMoreItemsRequest, LoadMoreItemsRequestJson} from "./LoadMoreItemsRequest";
 import { AuthToken } from "../../domain/AuthToken";
 
-export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User, LoadMoreUsersRequest> {
+export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
     public constructor(
         authToken: AuthToken,
         user: User,
@@ -24,7 +24,6 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User, LoadMoreUse
                 JSON.stringify(jsonObject._authToken)
             );
         }
-
 
         const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user))
         if (deserializedUser === null) {

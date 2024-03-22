@@ -1,6 +1,6 @@
 import {
     AuthToken,
-    LoadMoreItemsRequest,
+    LoadMoreItemsRequest, LoadMoreStatusesRequest,
     PostStatusRequest,
     Status,
     User
@@ -16,7 +16,7 @@ export class StatusService {
         pageSize: number,
         lastItem: Status | null
     ): Promise<[Status[], boolean]> {
-        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+        const loadMoreItemsRequest = new LoadMoreStatusesRequest(
             authToken,
             user,
             pageSize,
@@ -34,7 +34,7 @@ export class StatusService {
         pageSize: number,
         lastItem: Status | null
     ): Promise<[Status[], boolean]> {
-        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+        const loadMoreItemsRequest = new LoadMoreStatusesRequest(
             authToken,
             user,
             pageSize,

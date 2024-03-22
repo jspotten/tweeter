@@ -3,7 +3,7 @@ import {LoadMoreItemsRequest, LoadMoreItemsRequestJson} from "./LoadMoreItemsReq
 import { Status } from "../../domain/Status";
 import { AuthToken } from "../../domain/AuthToken";
 
-export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status, LoadMoreStatusesRequest> {
+export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status>{
     public constructor(
         authToken: AuthToken,
         user: User,
@@ -13,7 +13,7 @@ export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status, LoadMo
         super(authToken, user, pageSize, lastItem);
     }
 
-    public fromJson(request: LoadMoreStatusesRequest): LoadMoreStatusesRequest
+    static fromJson(request: LoadMoreStatusesRequest): LoadMoreStatusesRequest
     {
         const jsonObject: LoadMoreItemsRequestJson =
             request as unknown as LoadMoreItemsRequestJson;
@@ -25,7 +25,6 @@ export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status, LoadMo
                 JSON.stringify(jsonObject._authToken)
             );
         }
-
 
         const deserializedUser = User.fromJson(JSON.stringify(jsonObject._user))
         if (deserializedUser === null) {

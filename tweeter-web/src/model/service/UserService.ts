@@ -3,7 +3,7 @@ import {
     FollowCountRequest,
     FollowerStatusRequest, FollowRequest,
     GetUserRequest,
-    LoadMoreItemsRequest, UnfollowRequest,
+    LoadMoreItemsRequest, LoadMoreUsersRequest, UnfollowRequest,
     User
 } from "tweeter-shared";
 import {ServerFacade} from "../network/ServerFacade";
@@ -27,7 +27,7 @@ export class UserService {
         lastItem: User | null
     ): Promise<[User[], boolean]>
     {
-        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+        const loadMoreItemsRequest = new LoadMoreUsersRequest(
             authToken,
             user,
             pageSize,
@@ -45,7 +45,7 @@ export class UserService {
         lastItem: User | null
     ): Promise<[User[], boolean]>
     {
-        const loadMoreItemsRequest = new LoadMoreItemsRequest(
+        const loadMoreItemsRequest = new LoadMoreUsersRequest(
             authToken,
             user,
             pageSize,

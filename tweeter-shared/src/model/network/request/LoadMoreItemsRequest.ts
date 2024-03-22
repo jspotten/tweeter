@@ -11,13 +11,11 @@ export interface LoadMoreItemsRequestJson {
     _lastItem: JSON
 }
 
-export abstract class LoadMoreItemsRequest<U extends Status | User, T> implements LoadItemsRequest<U>{
+export class LoadMoreItemsRequest<U extends Status | User> implements LoadItemsRequest<U> {
     protected constructor(
         public authToken: AuthToken,
         public user: User,
         public pageSize: number,
         public lastItem: U | null
     ){}
-
-    protected abstract fromJson(request: LoadMoreItemsRequest<U, T>): T;
 }
