@@ -33,12 +33,15 @@ export class LoadMoreUsersRequest extends LoadMoreItemsRequest<User> {
             );
         }
 
-        const deserializedLastItem = User.fromJson(JSON.stringify(jsonObject.lastItem))
-        if (deserializedLastItem === null) {
-            throw new Error(
-                "LoadMoreUsersRequest, could not deserialize lastItem with json:\n" +
-                JSON.stringify(jsonObject.lastItem)
-            );
+        let deserializedLastItem = null;
+        if (request.lastItem !== null) {
+            deserializedLastItem = User.fromJson(JSON.stringify(jsonObject.lastItem));
+            if(deserializedLastItem === null) {
+                throw new Error(
+                    "LoadMoreStatusesRequest, could not deserialize lastItem with json:\n" +
+                    JSON.stringify(jsonObject.lastItem)
+                );
+            }
         }
 
         return new LoadMoreUsersRequest(

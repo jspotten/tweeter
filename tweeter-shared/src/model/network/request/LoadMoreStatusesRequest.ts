@@ -33,6 +33,7 @@ export class LoadMoreStatusesRequest extends LoadMoreItemsRequest<Status>{
                 JSON.stringify(jsonObject.user)
             );
         }
+
         let deserializedLastItem = null;
         if (request.lastItem !== null) {
             deserializedLastItem = Status.fromJson(JSON.stringify(jsonObject.lastItem));
