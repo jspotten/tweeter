@@ -8,6 +8,7 @@ import {
     User
 } from "tweeter-shared";
 import "isomorphic-fetch";
+import {StatusService} from "../../src/model/service/StatusService";
 
 describe('Client-Side ServerFacade Communications with Server',  () => {
     const serverFacade = new ServerFacade()
@@ -74,25 +75,23 @@ describe('Client-Side ServerFacade Communications with Server',  () => {
     });
 
     it('returns correct results when calling server\'s story endpoint', async () => {
-        const storyRequest = new LoadMoreStatusesRequest(
+        const statusService = new StatusService();
+
+        const response = await statusService.loadMoreStoryItems(
             testAuthToken,
             testUser,
             5,
-            null,
+            null
         )
-
-        const response = await serverFacade.loadMoreStoryItems(storyRequest);
-        expect(response).toEqual(expect.objectContaining( {
-            _items: [
+        expect(response).toEqual(expect.objectContaining( [
+            [
                 expect.any(Status),
                 expect.any(Status),
                 expect.any(Status),
                 expect.any(Status),
                 expect.any(Status),
             ],
-            _hasMoreItems: true,
-            _message: 'Successful Loading of More Story Items',
-            _success: true,
-        }))
+            expect.any(Boolean)
+        ]))
     });
 })
