@@ -1,6 +1,11 @@
 import {AuthToken, FakeData, User} from "tweeter-shared";
+import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
 
 export class UserService {
+    private daoFactory = new DdbDaoFactory();
+    private followsDao = this.daoFactory.makeFollowsDao();
+    private usersDao = this.daoFactory.makeUsersDao();
+
     public async getUser(
         authToken: AuthToken,
         alias: string
@@ -33,8 +38,7 @@ export class UserService {
         userToFollow: User
     ): Promise<[string, boolean]> {
         // Pause so we can see the following message. Remove when connected to the server
-        await new Promise((f) => setTimeout(f, 2000));
-
+        // this.followsDao.putFollows()
         return [`Successful Following of ${userToFollow}` , true];
     };
 
