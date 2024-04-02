@@ -27,11 +27,18 @@ export class PostStatusPresenter extends Presenter<PostStatusView>
             this.view.displayInfoMessage("Posting status...", 0);
             let status = new Status(post, currentUser!, Date.now());
 
-            await this.service.postStatus(authToken!, status);
+            const success = await this.service.postStatus(authToken!, status);
 
             this.view.clearLastInfoMessage();
             this.view.setPost("");
-            this.view.displayInfoMessage("Status posted!", 200);
+            if(success)
+            {
+                this.view.displayInfoMessage("Status posted!", 200);
+            }
+            else
+            {
+                this.view.displayInfoMessage("Unable to post the status!", 500);
+            }
         }, this.getItemDetails())
     };
 

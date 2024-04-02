@@ -47,8 +47,9 @@ export class StatusService {
     public async postStatus(
         authToken: AuthToken,
         newStatus: Status
-    ): Promise<void> {
+    ): Promise<boolean> {
         const postStatusRequest = new PostStatusRequest(authToken, newStatus);
         const postStatusResponse = await this.facade.postStatus(postStatusRequest)
+        return postStatusResponse._success
     };
 }
