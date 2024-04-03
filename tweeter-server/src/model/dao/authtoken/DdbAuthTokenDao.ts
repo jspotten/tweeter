@@ -32,23 +32,14 @@ export class DdbAuthTokenDao implements AuthTokenDao {
         await this.client.send(new PutCommand(params))
     }
 
-    public async deleteAuthToken(authToken: string, timestamp: number): Promise<void>
+    public async deleteAuthToken(authToken: string): Promise<void>
     {
         const params = {
             TableName: this.tableName,
-            Key: this.generateFollowsKeyPair(
-                authToken,
-                timestamp
-            )
+            Key: {
+                [this.authToken]: authToken
+            }
         };
         await this.client.send(new DeleteCommand(params));
-    }
-
-    private generateFollowsKeyPair(authToken: string, timestamp: number)
-    {
-        return {
-            [this.authToken]: authToken,
-            [this.timestamp]: timestamp,
-        }
     }
 }

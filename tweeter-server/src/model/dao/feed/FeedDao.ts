@@ -1,5 +1,6 @@
 import {DataPage} from "../follows/DataPage";
 import {FeedStatus} from "./FeedStatus";
+import {Status} from "tweeter-shared";
 
 export interface FeedDao {
     readonly tableName: string;
@@ -9,5 +10,5 @@ export interface FeedDao {
         ownerHandle: string,
         pageSize: number,
         lastStatus: string | undefined
-    ) : Promise<DataPage<FeedStatus> | undefined>;
+    ) : Promise<DataPage<Status>>;
 }

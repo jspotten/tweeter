@@ -29,7 +29,6 @@ export class AuthenticateService {
     public async logout(authToken: AuthToken): Promise<[string, boolean]> {
         await this.authTokenDao.deleteAuthToken(
             authToken.token,
-            authToken.timestamp
         );
         return ["Successful Logout", true]
     };

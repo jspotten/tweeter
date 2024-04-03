@@ -1,13 +1,20 @@
 import {AuthToken, FakeData, Status, User} from "tweeter-shared"
+import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
+import {DaoFactory} from "../dao/factory/DaoFactory";
 
 export class StatusService {
+    private daoFactory: DaoFactory = new DdbDaoFactory();
+    private feedDao = this.daoFactory.makeFeedDao();
+    private storyDao = this.daoFactory.makeStoryDao();
+
+
     public async loadMoreFeedItems(
         authToken: AuthToken,
         user: User,
         pageSize: number,
         lastItem: Status | null
     ): Promise<[Status[], boolean, string, boolean]> {
-        // TODO: Replace with the result of calling server
+        // const pageOfStatuses = this.followsDao.get
         return [...FakeData.instance.getPageOfStatuses(lastItem, pageSize), "Successful Loading of More Feed Items", true];
     };
 
