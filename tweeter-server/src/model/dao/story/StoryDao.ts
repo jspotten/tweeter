@@ -9,5 +9,5 @@ export interface StoryDao {
         ownerHandle: string,
         pageSize: number,
         lastStatus: string | undefined
-    ) : Promise<DataPage<StoryStatus>>;
+    ) : Promise<DataPage<StoryStatus> | undefined>;
 }

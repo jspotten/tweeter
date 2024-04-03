@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
-import {StatusDTO} from "../dto/StatusDTO";
 import {AuthTokenDTO} from "../dto/AuthTokenDTO";
+
+
 export class AuthToken {
   private _token: string;
   private _timestamp: number;

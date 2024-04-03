@@ -9,7 +9,7 @@ export class DdbFeedDao implements FeedDao{
         return Promise.resolve(undefined);
     }
 
-    getPageOfFeedStatuses(followerHandle: string, pageSize: number, lastStatus: string | undefined): Promise<DataPage<FeedStatus>> {
+    getPageOfFeedStatuses(followerHandle: string, pageSize: number, lastStatus: string | undefined): Promise<DataPage<FeedStatus> | undefined> {
         return Promise.resolve(undefined);
     }
 

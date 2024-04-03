@@ -9,7 +9,7 @@ export class DdbStoryDao implements StoryDao{
         return Promise.resolve(undefined);
     }
 
-    getPageOfStoryStatuses(ownerHandle: string, pageSize: number, lastStatus: string | undefined): Promise<DataPage<StoryStatus>> {
+    getPageOfStoryStatuses(ownerHandle: string, pageSize: number, lastStatus: string | undefined): Promise<DataPage<StoryStatus> | undefined> {
         return Promise.resolve(undefined);
     }
 

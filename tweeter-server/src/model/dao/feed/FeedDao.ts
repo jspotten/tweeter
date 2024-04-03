@@ -9,5 +9,5 @@ export interface FeedDao {
         ownerHandle: string,
         pageSize: number,
         lastStatus: string | undefined
-    ) : Promise<DataPage<FeedStatus>>;
+    ) : Promise<DataPage<FeedStatus> | undefined>;
 }

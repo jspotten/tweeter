@@ -3,6 +3,7 @@ import {FeedDao} from "../feed/FeedDao";
 import {AuthTokenDao} from "../authtoken/AuthTokenDao";
 import {StoryDao} from "../story/StoryDao";
 import {UsersDao} from "../users/UsersDao";
+import {S3Dao} from "../s3/S3Dao";
 
 export interface DaoFactory {
     makeFollowsDao(): FollowsDao;
@@ -10,4 +11,5 @@ export interface DaoFactory {
     makeStoryDao(): StoryDao;
     makeAuthTokenDao(): AuthTokenDao;
     makeUsersDao(): UsersDao;
+    makeS3Dao(): S3Dao
 }

@@ -9,10 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tweeter-shared": "file:../tweeter-shared",
+    "bcryptjs": "^2.4.3",
     "moment": "^2.29.4",
+    "tweeter-shared": "file:../tweeter-shared",
     "uuid": "^9.0.0"
   },
-  "devDependencies": {},
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6"
+  }
 }

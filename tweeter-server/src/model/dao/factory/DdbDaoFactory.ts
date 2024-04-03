@@ -9,6 +9,8 @@ import {AuthTokenDao} from "../authtoken/AuthTokenDao";
 import {DaoFactory} from "./DaoFactory";
 import {StoryDao} from "../story/StoryDao";
 import {UsersDao} from "../users/UsersDao";
+import {S3Dao} from "../s3/S3Dao";
+import {DdbS3Dao} from "../s3/DdbS3Dao";
 
 export class DdbDaoFactory implements DaoFactory {
     public makeFollowsDao(): FollowsDao
@@ -34,5 +36,10 @@ export class DdbDaoFactory implements DaoFactory {
     public makeUsersDao(): UsersDao
     {
         return new DdbUsersDao();
+    }
+
+    public makeS3Dao(): S3Dao
+    {
+        return new DdbS3Dao();
     }
 }

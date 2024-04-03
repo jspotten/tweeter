@@ -1,22 +1,36 @@
-import {AuthToken, FakeData, User} from "tweeter-shared";
+import {AuthToken, User} from "tweeter-shared";
+import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
+import {DaoFactory} from "../dao/factory/DaoFactory";
+import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
+
 
 export class AuthenticateService {
+    private daoFactory: DaoFactory = new DdbDaoFactory();
+    private usersDao = this.daoFactory.makeUsersDao();
+    private authTokenDao = this.daoFactory.makeAuthTokenDao();
+    private s3Dao = this.daoFactory.makeS3Dao();
+
     public async login(
         alias: string,
         password: string
     ): Promise<[User, AuthToken, string, boolean]> {
-        let user = FakeData.instance.firstUser;
+        let [user, _password] = await this.usersDao.getUserByHandle(alias);
 
-        if (user === null) {
+        if (!user || !compareSync(password, _password)) {
             throw new Error("Invalid alias or password");
         }
-        // Serialize and deserialize to get token and user
-        return [user, FakeData.instance.authToken, "Successful Login", true];
+
+        const authToken: AuthToken = AuthToken.Generate();
+        await this.authTokenDao.putAuthToken(authToken.token);
+
+        return [user, authToken, "Successful Login", true];
     };
 
     public async logout(authToken: AuthToken): Promise<[string, boolean]> {
-        // Pause so we can see the logging out message. Delete when the call to the server is implemented.
-        await new Promise((res) => setTimeout(res, 1000));
+        await this.authTokenDao.deleteAuthToken(
+            authToken.token,
+            authToken.timestamp
+        );
         return ["Successful Logout", true]
     };
 
@@ -27,12 +41,26 @@ export class AuthenticateService {
         password: string,
         imageBytes: string
     ): Promise<[User, AuthToken, string, boolean]> {
-        let user = FakeData.instance.firstUser;
+        const imgUrl = await this.s3Dao.putImage(alias, imageBytes);
 
-        if (user === null) {
+        const salt = genSaltSync(10);
+        const user = await this.usersDao.putUser(
+            new User(
+                firstName,
+                lastName,
+                alias,
+                imgUrl,
+            ),
+            hashSync(password, salt),
+        );
+
+        if (!user) {
             throw new Error("Invalid registration");
         }
 
-        return [user, FakeData.instance.authToken, "Successful Registration", true];
+        const authToken: AuthToken = AuthToken.Generate();
+        await this.authTokenDao.putAuthToken(authToken.token);
+
+        return [user, authToken, "Successful Registration", true];
     };
 }
