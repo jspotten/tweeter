@@ -1,24 +1,29 @@
 import {FeedDao} from "./FeedDao";
-import {FeedStatus} from "./FeedStatus";
-import {DataPage} from "../follows/DataPage";
-import {DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {DataPage} from "../DataPage";
+import {DeleteCommand, DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
-import {Status, User} from "tweeter-shared";
+import {Status} from "tweeter-shared";
 
 export class DdbFeedDao implements FeedDao {
     readonly tableName: string = 'feed';
     readonly owner_handle = 'owner_handle';
     readonly timestamp = 'timestamp';
-    readonly author_handle = 'author_handle';
     readonly status = 'status';
 
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
-    public async deleteStatus(status: FeedStatus): Promise<void> {
-        return Promise.resolve(undefined);
+    public async deleteStatus(status: Status): Promise<void> {
+        const params = {
+            TableName: this.tableName,
+            Key: {
+                [this.owner_handle]: status.user.alias,
+                [this.timestamp]: status.timestamp,
+            }
+        };
+        await this.client.send(new DeleteCommand(params));
     }
 
-    public async getPageOfFeedStatuses(followerHandle: string, pageSize: number, lastStatus: string | undefined): Promise<DataPage<Status>> {
+    public async getPageOfFeedStatuses(followerHandle: string, pageSize: number, lastStatus: Status | null): Promise<DataPage<Status>> {
         const params = {
             KeyConditionExpression: `${this.owner_handle} = :v`,
             ExpressionAttributeValues: {
@@ -27,37 +32,31 @@ export class DdbFeedDao implements FeedDao {
             TableName: this.tableName,
             Limit: pageSize,
             ExclusiveStartKey:
-                lastStatus === undefined
+                lastStatus === null
                     ? undefined
                     : {
                         [this.owner_handle]: followerHandle,
-                        [this.status]: lastStatus,
+                        [this.timestamp]: lastStatus.timestamp,
                     },
         };
 
         const items: Status[] = [];
         const data = await this.client.send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
+        // Store the entire user in the table instead of just the handle.
         data.Items?.forEach((item) =>
-            items.push(
-                new Status(
-                    item.status,
-                    new User("", "", item.author_handle, "") ,
-                    item.status,
-                )
-            )
+            items.push(item.status)
         );
         return new DataPage<Status>(items, hasMorePages);
     }
 
-    public async putStatus(status: FeedStatus): Promise<void> {
+    public async putStatus(owner_handle: string, status: Status): Promise<void> {
         const params = {
             TableName: this.tableName,
             Item: {
-                [this.owner_handle]: status.followerHandle,
-                [this.timestamp]: status.timeStamp,
-                [this.author_handle]: status.authorHandle,
-                [this.status]: status.status,
+                [this.owner_handle]: owner_handle,
+                [this.timestamp]: status.timestamp,
+                [this.status]: status,
             }
         }
         await this.client.send(new PutCommand(params));

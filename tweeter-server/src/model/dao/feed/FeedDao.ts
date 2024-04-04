@@ -1,14 +1,16 @@
-import {DataPage} from "../follows/DataPage";
-import {FeedStatus} from "./FeedStatus";
+import {DataPage} from "../DataPage";
 import {Status} from "tweeter-shared";
 
 export interface FeedDao {
     readonly tableName: string;
-    putStatus(status: FeedStatus): Promise<void>;
-    deleteStatus(status: FeedStatus): Promise<void>;
+    putStatus(
+        owner_handle: string,
+        status: Status
+    ): Promise<void>;
+    deleteStatus(status: Status): Promise<void>;
     getPageOfFeedStatuses(
         ownerHandle: string,
         pageSize: number,
-        lastStatus: string | undefined
+        lastStatus: Status | null
     ) : Promise<DataPage<Status>>;
 }

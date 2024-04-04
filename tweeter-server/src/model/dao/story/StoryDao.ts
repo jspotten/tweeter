@@ -1,13 +1,13 @@
-import {DataPage} from "../follows/DataPage";
-import {StoryStatus} from "./StoryStatus";
+import {DataPage} from "../DataPage";
+import {Status} from "tweeter-shared";
 
 export interface StoryDao {
     readonly tableName: string;
-    putStatus(status: StoryStatus): Promise<void>;
-    deleteStatus(status: StoryStatus): Promise<void>;
+    putStatus(status: Status): Promise<void>;
+    deleteStatus(status: Status): Promise<void>;
     getPageOfStoryStatuses(
-        ownerHandle: string,
+        authorHandle: string,
         pageSize: number,
-        lastStatus: string | undefined
-    ) : Promise<DataPage<StoryStatus> | undefined>;
+        lastStatus: Status | null
+    ) : Promise<DataPage<Status>>;
 }

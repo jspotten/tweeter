@@ -1,4 +1,4 @@
-import {DataPage} from "./DataPage";
+import {DataPage} from "../DataPage";
 import {
     DeleteCommand,
     DynamoDBDocumentClient,
@@ -30,6 +30,25 @@ export class DdbFollowsDao implements FollowsDao {
             },
         };
         await this.client.send(new PutCommand(params));
+    }
+
+    public async getFollowers(followeeHandle: string): Promise<string[]>
+    {
+        const params = {
+            KeyConditionExpression: `${this.followeeHandle} = :v`,
+            ExpressionAttributeValues: {
+                ":v": followeeHandle,
+            },
+            TableName: this.tableName,
+            IndexName: this.indexName,
+        };
+
+        const items: string[] = [];
+        const data = await this.client.send(new QueryCommand(params));
+        data.Items?.forEach((item) =>
+            items.push(item.follower_handle)
+        );
+        return items;
     }
 
     public async getFollows(follow: Follow): Promise<Follow | undefined> {
