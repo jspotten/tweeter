@@ -1,4 +1,4 @@
-import {AuthToken, User} from "tweeter-shared";
+import {User} from "tweeter-shared";
 
 export interface UsersDao {
     readonly tableName: string;

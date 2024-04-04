@@ -1,20 +1,21 @@
 import {DataPage} from "../DataPage";
-import {Follow} from "./Follows";
+import {User} from "tweeter-shared";
 
 export interface FollowsDao {
     readonly tableName: string;
-    putFollows(follow: Follow): Promise<void>;
+    putFollows(follower: User, followee: User): Promise<void>;
     getFollowers(followeeHandle: string): Promise<string[]>
-    getFollows(follow: Follow): Promise<Follow | undefined>;
-    deleteFollows(follow: Follow): Promise<void>;
+    getFollows(user: User, selectedUser: User): Promise<boolean>;
+    deleteFollows(follower: User, followee: User): Promise<void>;
     getPageOfFollowees(
         followerHandle: string,
         pageSize: number,
         lastFolloweeHandle: string | undefined
-    ) : Promise<DataPage<Follow>>;
+    ) : Promise<DataPage<User>>;
     getPageOfFollowers(
+
         followeeHandle: string,
         pageSize: number,
         lastFollowerHandle: string | undefined
-    ): Promise<DataPage<Follow>>
+    ): Promise<DataPage<User>>
 }

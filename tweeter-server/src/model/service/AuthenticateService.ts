@@ -1,23 +1,20 @@
 import {AuthToken, User} from "tweeter-shared";
-import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
-import {DaoFactory} from "../dao/factory/DaoFactory";
 import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
+import {Service} from "./Service";
 
 
-export class AuthenticateService {
-    private daoFactory: DaoFactory = new DdbDaoFactory();
+export class AuthenticateService extends Service {
     private usersDao = this.daoFactory.makeUsersDao();
-    private authTokenDao = this.daoFactory.makeAuthTokenDao();
     private s3Dao = this.daoFactory.makeS3Dao();
 
     public async login(
         alias: string,
         password: string
-    ): Promise<[User, AuthToken, string, boolean]> {
+    ): Promise<[User | null, AuthToken | null, string, boolean]> {
         let [user, _password] = await this.usersDao.getUserByHandle(alias);
 
         if (!user || !compareSync(password, _password)) {
-            throw new Error("Invalid alias or password");
+            return [null, null, "Invalid alias or password", false];
         }
 
         const authToken: AuthToken = AuthToken.Generate();
@@ -30,7 +27,7 @@ export class AuthenticateService {
         await this.authTokenDao.deleteAuthToken(
             authToken.token,
         );
-        return ["Successful Logout", true]
+        return ["Successful Logout", true];
     };
 
     public async register(

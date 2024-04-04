@@ -1,8 +1,14 @@
 import {StoryDao} from "./StoryDao";
 import {DataPage} from "../DataPage";
 import {Status} from "tweeter-shared";
-import {DeleteCommand, DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
+import {
+    DeleteCommand,
+    DynamoDBDocumentClient,
+    PutCommand,
+    QueryCommand
+} from "@aws-sdk/lib-dynamodb";
+
 
 export class DdbStoryDao implements StoryDao {
     readonly tableName: string = 'story';

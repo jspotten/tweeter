@@ -29,10 +29,6 @@ export class LoadMoreUsersResponse extends LoadMoreItemsResponse<User> {
                 deserializedItems.push(deserializedStatus)
         }
 
-        if (deserializedItems.length === 0) {
-            throw new Error("LoadMoreUsersResponse, could not deserialize items with json");
-        }
-
         const deserializedHasMoreItems: boolean = JSON.parse(JSON.stringify(jsonObject._hasMoreItems));
         if (deserializedHasMoreItems === null) {
             throw new Error("LoadMoreUsersResponse, could not deserialize token with json");

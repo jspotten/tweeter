@@ -7,12 +7,13 @@ import {UserService} from "../model/service/UserService";
 
 export const handler = async (event: GetUserRequest): Promise<GetUserResponse> => {
     try {
-        if(!event.authToken || !event.alias)
+        const getUserRequest = GetUserRequest.fromJson(event);
+        if(!getUserRequest.authToken || !getUserRequest.alias)
         {
             throw new Error("[Bad Request]");
         }
 
-        const user = await new UserService().getUser(event.authToken, event.alias);
+        const user = await new UserService().getUser(getUserRequest.authToken, getUserRequest.alias);
         return {
             userDTO: user ? new User(
                     user.firstName,

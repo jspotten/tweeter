@@ -1,8 +1,18 @@
-export abstract class Service {
-    protected expirationTime = 120000;
+import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
+import {DaoFactory} from "../dao/factory/DaoFactory";
+import {AuthToken} from "tweeter-shared";
 
-    protected validateAuthToken(timestamp: number)
+export abstract class Service {
+    private expirationTime = 120000;
+    protected daoFactory: DaoFactory = new DdbDaoFactory()
+    protected authTokenDao = this.daoFactory.makeAuthTokenDao();
+
+    protected async validateAuthToken(authToken: AuthToken)
     {
-        return Date.now() - timestamp > this.expirationTime
+        if(Date.now() - authToken.timestamp > this.expirationTime)
+        {
+            await this.authTokenDao.deleteAuthToken(authToken.token)
+            throw new Error("[Bad Request] Authentication Token has expired!")
+        }
     }
 }

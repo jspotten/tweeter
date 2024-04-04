@@ -20,6 +20,7 @@ export class LoadMoreStatusesResponse extends LoadMoreItemsResponse<Status> {
 
         const jsonObject: LoadMoreItemsResponseJson =
             json as unknown as LoadMoreItemsResponseJson;
+
         const deserializedItems: Status[] = []
         for(let item in jsonObject._items)
         {
@@ -27,10 +28,6 @@ export class LoadMoreStatusesResponse extends LoadMoreItemsResponse<Status> {
             let deserializedStatus = Status.fromJson(JSON.stringify(itemJson));
             if(deserializedStatus)
                 deserializedItems.push(deserializedStatus)
-        }
-
-        if (deserializedItems.length === 0) {
-            throw new Error("LoadMoreStatusesResponse, could not deserialize items with json");
         }
 
         const deserializedHasMoreItems: boolean = JSON.parse(JSON.stringify(jsonObject._hasMoreItems));

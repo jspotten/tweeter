@@ -19,9 +19,13 @@ export class AuthenticateService {
         let loginResponse
             = await this.facade.login(loginRequest)
 
+        if(!loginResponse._success)
+        {
+            throw new Error(loginResponse._message);
+        }
+
         const user = User.fromJson(JSON.stringify(loginResponse.user))
         const token = AuthToken.fromJson(JSON.stringify(loginResponse.token))
-
         if (user === null || token === null) {
             throw new Error("Invalid alias or password");
         }
