@@ -6,7 +6,6 @@ export interface FollowsDao {
     putFollows(follow: Follow): Promise<void>;
     getFollowers(followeeHandle: string): Promise<string[]>
     getFollows(follow: Follow): Promise<Follow | undefined>;
-    updateFollows(follow: Follow): Promise<void>;
     deleteFollows(follow: Follow): Promise<void>;
     getPageOfFollowees(
         followerHandle: string,

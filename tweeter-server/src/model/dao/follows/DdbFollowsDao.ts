@@ -3,7 +3,8 @@ import {
     DeleteCommand,
     DynamoDBDocumentClient,
     GetCommand,
-    PutCommand, QueryCommand,
+    PutCommand,
+    QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {FollowsDao} from "./FollowsDao";
@@ -65,20 +66,6 @@ export class DdbFollowsDao implements FollowsDao {
                 output.Item[this.followerNameAttr],
                 output.Item[this.followeeNameAttr],
             );
-    }
-
-    public async updateFollows(follow: Follow): Promise<void> {
-        const params = {
-            TableName: this.tableName,
-            Key: this.generateFollowsKeyPair(follow),
-            ExpressionAttributeValues: {
-                ":fr_name": follow.follower_name,
-                ":fe_name": follow.followee_name,
-            },
-            UpdateExpression:
-                `SET ${this.followerNameAttr} = :fr_name, ${this.followeeNameAttr} = :fe_name`
-        };
-        await this.client.send(new DeleteCommand(params));
     }
 
     public async deleteFollows(follow: Follow): Promise<void> {

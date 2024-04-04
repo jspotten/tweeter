@@ -1,8 +1,8 @@
-import {AuthToken} from "tweeter-shared";
+import {User} from "tweeter-shared";
 
 export interface AuthTokenDao {
     readonly tableName: string;
-    putAuthToken(authToken: string): Promise<void>;
-    getAuthToken(authToken: string): Promise<AuthToken | undefined>;
-    deleteAuthToken(authToken: string): Promise<void>;
+    putAuthToken(token: string, user: User): Promise<void>;
+    getTokenUser(token: string): Promise<User | null>;
+    deleteAuthToken(token: string): Promise<void>;
 }

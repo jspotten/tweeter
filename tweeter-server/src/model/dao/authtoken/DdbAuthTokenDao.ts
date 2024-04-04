@@ -1,5 +1,4 @@
 import {AuthTokenDao} from "./AuthTokenDao";
-import {AuthToken} from "tweeter-shared";
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
 import {
     DynamoDBDocumentClient,
@@ -7,37 +6,48 @@ import {
     GetCommand,
     DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
+import {User} from "tweeter-shared";
 
 
 export class DdbAuthTokenDao implements AuthTokenDao {
     readonly tableName: string = 'authtokens';
-    readonly authToken = 'token'
-    readonly timestamp = 'timestamp'
+    readonly token: string = 'token'
+    readonly timestamp: string = 'timestamp'
+    readonly user: string = 'user'
 
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
 
-    public async getAuthToken(authToken: string): Promise<AuthToken | undefined> {
-        return Promise.resolve(undefined);
+    public async getTokenUser(token: string): Promise<User | null> {
+        const params = {
+            TableName: this.tableName,
+            Key: {
+                [this.token]: token
+            }
+        };
+        const output = await this.client.send(new GetCommand(params));
+        return output.Item == undefined ? null
+        : User.fromJson(output.Item[this.user])
     }
 
-    public async putAuthToken(authToken: string): Promise<void> {
+    public async putAuthToken(token: string, user: User): Promise<void> {
         const params = {
             TableName: this.tableName,
             Item: {
-                [this.authToken]: authToken,
+                [this.token]: token,
                 [this.timestamp]: Date.now(),
+                [this.user]: JSON.stringify(user),
             }
         }
         await this.client.send(new PutCommand(params))
     }
 
-    public async deleteAuthToken(authToken: string): Promise<void>
+    public async deleteAuthToken(token: string): Promise<void>
     {
         const params = {
             TableName: this.tableName,
             Key: {
-                [this.authToken]: authToken
+                [this.token]: token
             }
         };
         await this.client.send(new DeleteCommand(params));

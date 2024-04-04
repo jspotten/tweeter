@@ -21,7 +21,7 @@ export class AuthenticateService {
         }
 
         const authToken: AuthToken = AuthToken.Generate();
-        await this.authTokenDao.putAuthToken(authToken.token);
+        await this.authTokenDao.putAuthToken(authToken.token, user);
 
         return [user, authToken, "Successful Login", true];
     };
@@ -58,7 +58,7 @@ export class AuthenticateService {
         }
 
         const authToken: AuthToken = AuthToken.Generate();
-        await this.authTokenDao.putAuthToken(authToken.token);
+        await this.authTokenDao.putAuthToken(authToken.token, user);
 
         return [user, authToken, "Successful Registration", true];
     };

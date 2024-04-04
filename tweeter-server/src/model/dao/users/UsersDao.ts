@@ -5,5 +5,7 @@ export interface UsersDao {
     putUser(user: User, password: string): Promise<User | undefined>;
     getUserByHandle(
         userHandle: string
-    ): Promise<[User | undefined, string, number, number]>
+    ): Promise<[User | null, string, number, number]>
+    updateUserFollowerCount(userHandle: string, value: number): Promise<void>
+    updateUserFolloweeCount(userHandle: string, value: number): Promise<void>
 }

@@ -5,6 +5,7 @@ import {
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
+    UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 
@@ -20,7 +21,7 @@ export class DdbUsersDao implements UsersDao {
 
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
-    public async getUserByHandle(userHandle: string): Promise<[User | undefined, string, number, number]> {
+    public async getUserByHandle(userHandle: string): Promise<[User | null, string, number, number]> {
         const params = {
             TableName: this.tableName,
             Key: {
@@ -29,7 +30,7 @@ export class DdbUsersDao implements UsersDao {
         };
         const output = await this.client.send(new GetCommand(params));
         return output.Item == undefined
-            ? [undefined, "", 0, 0]
+            ? [null, "", 0, 0]
             : [
                 new User(
                     output.Item[this.first],
@@ -40,7 +41,7 @@ export class DdbUsersDao implements UsersDao {
                 output.Item[this.password],
                 output.Item[this.followersCount],
                 output.Item[this.followeesCount]
-            ]
+            ];
     }
 
     public async putUser(user: User, password: string): Promise<User | undefined> {
@@ -60,13 +61,29 @@ export class DdbUsersDao implements UsersDao {
         return user;
     }
 
-    public async updateUserFollowerCount(): Promise<void>
+    public async updateUserFollowerCount(userHandle: string, value: number): Promise<void>
     {
-
+        const params = {
+            TableName: this.tableName,
+            Key: {
+                [this.handle]: userHandle
+            },
+            UpdateExpression:
+                `SET ${this.followersCount} = ${this.followersCount + value}`
+        };
+        await this.client.send(new UpdateCommand(params));
     }
 
-    public async updateUserFolloweeCount(): Promise<void>
+    public async updateUserFolloweeCount(userHandle: string, value: number): Promise<void>
     {
-
+        const params = {
+            TableName: this.tableName,
+            Key: {
+                [this.handle]: userHandle
+            },
+            UpdateExpression:
+                `SET ${this.followeesCount} = ${this.followeesCount + value}`
+        };
+        await this.client.send(new UpdateCommand(params));
     }
 }

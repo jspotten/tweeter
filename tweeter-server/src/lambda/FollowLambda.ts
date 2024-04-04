@@ -3,12 +3,16 @@ import { UserService } from "../model/service/UserService";
 
 export const handler = async (event: FollowRequest): Promise<TweeterResponse> => {
     try {
-        if(!event.authToken || !event.userToFollow)
+        const followRequest = FollowRequest.fromJson(event);
+        if(!followRequest.authToken || !followRequest.userToFollow)
         {
             throw new Error("[Bad Request]");
         }
 
-        let [ message, success] = await new UserService().follow(event.authToken, event.userToFollow);
+        let [ message, success] =
+            await new UserService().follow(
+                followRequest.authToken, followRequest.userToFollow
+            );
         return { _message: message, _success: success}
     }
     catch (error)
