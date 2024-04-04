@@ -1,13 +1,13 @@
 import {AuthToken, Status, User} from "tweeter-shared"
 import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
 import {DaoFactory} from "../dao/factory/DaoFactory";
+import {Service} from "./Service";
 
-export class StatusService {
+export class StatusService extends Service {
     private daoFactory: DaoFactory = new DdbDaoFactory();
     private feedDao = this.daoFactory.makeFeedDao();
     private storyDao = this.daoFactory.makeStoryDao();
     private followsDao = this.daoFactory.makeFollowsDao();
-    private expirationTime = 120000;
 
 
     public async loadMoreFeedItems(
@@ -66,9 +66,4 @@ export class StatusService {
         }
         return ["Successful Posting of Status", true]
     };
-
-    private validateAuthToken(timestamp: number)
-    {
-        return Date.now() - timestamp > this.expirationTime
-    }
 }

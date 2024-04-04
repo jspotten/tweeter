@@ -1,7 +1,8 @@
 import {AuthToken, FakeData, User} from "tweeter-shared";
 import {DdbDaoFactory} from "../dao/factory/DdbDaoFactory";
+import {Service} from "./Service";
 
-export class UserService {
+export class UserService extends Service {
     private daoFactory = new DdbDaoFactory();
     private followsDao = this.daoFactory.makeFollowsDao();
     private usersDao = this.daoFactory.makeUsersDao();
@@ -56,14 +57,18 @@ export class UserService {
         authToken: AuthToken,
         user: User
     ): Promise<[number, string, boolean]> {
-        return [await FakeData.instance.getFollowersCount(user), "Successful Followers Count Retrieval", true];
+        const [ _user, _, followersCount, followeesCount] =
+            await this.usersDao.getUserByHandle(user.alias)
+        return [followersCount, "Successful Followers Count Retrieval", true];
     };
 
     public async getFolloweesCount(
         authToken: AuthToken,
         user: User
     ): Promise<[number, string, boolean]> {
-        return [await FakeData.instance.getFolloweesCount(user), "Successful Followees Count Retrieval", true];
+        const [ _user, _, followersCount, followeesCount] =
+            await this.usersDao.getUserByHandle(user.alias)
+        return [followeesCount, "Successful Followees Count Retrieval", true];
     };
 
     public async getIsFollowerStatus(
