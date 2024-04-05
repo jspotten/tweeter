@@ -15,8 +15,10 @@ export const handler = async (event: FollowRequest): Promise<TweeterResponse> =>
             );
         return { _message: message, _success: success}
     }
-    catch (error)
+    catch (error: unknown)
     {
-        throw new Error(`[Internal Server Error]: ${error}`);
+        if(error instanceof Error)
+            throw new Error(`${error.message}`);
+        throw new Error(`[Internal Server Error]: ${error}`)
     }
 };

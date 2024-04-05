@@ -12,7 +12,7 @@ export abstract class Service {
         if(Date.now() - authToken.timestamp > this.expirationTime)
         {
             await this.authTokenDao.deleteAuthToken(authToken.token)
-            throw new Error("[Bad Request] Authentication Token has expired!")
+            throw new Error("[Unauthorized Request] Authentication Token has expired!")
         }
     }
 }

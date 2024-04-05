@@ -17,6 +17,8 @@ export const handler = async (event: UnfollowRequest): Promise<TweeterResponse> 
     }
     catch (error)
     {
-        throw new Error(`[Internal Server Error]: ${error}`);
+        if(error instanceof Error)
+            throw new Error(`${error.message}`);
+        throw new Error(`[Internal Server Error]: ${error}`)
     }
 };

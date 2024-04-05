@@ -12,6 +12,8 @@ export const handler = async (event: LoginRequest): Promise<AuthenticateResponse
     }
     catch (error)
     {
+        if(error instanceof Error)
+            throw new Error(`${error.message}`);
         throw new Error(`[Internal Server Error]: ${error}`)
     }
 };

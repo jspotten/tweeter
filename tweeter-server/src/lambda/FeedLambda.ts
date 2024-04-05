@@ -17,6 +17,8 @@ export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreS
         return new LoadMoreStatusesResponse(statuses, hasMoreItems, message, success);
     }
     catch (error) {
+        if(error instanceof Error)
+            throw new Error(`${error.message}`);
         throw new Error(`[Internal Server Error]: ${error}`)
     }
 };

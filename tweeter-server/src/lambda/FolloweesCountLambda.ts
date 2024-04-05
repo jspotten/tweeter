@@ -20,6 +20,8 @@ export const handler = async (event: FollowCountRequest): Promise<FollowCountRes
     }
     catch (error)
     {
-        throw new Error(`[Internal Server Error]: ${error}`);
+        if(error instanceof Error)
+            throw new Error(`${error.message}`);
+        throw new Error(`[Internal Server Error]: ${error}`)
     }
 };
