@@ -44,8 +44,13 @@ export class DdbFeedDao implements FeedDao {
         const data = await this.client.send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
         // Store the entire user in the table instead of just the handle.
-        data.Items?.forEach((item) =>
-            items.push(item.status)
+        data.Items?.forEach((item) => {
+            let status = Status.fromJson(item.status);
+            if(status)
+            {
+                items.push(status)
+            }
+        }
         );
         return new DataPage<Status>(items, hasMorePages);
     }
@@ -56,10 +61,9 @@ export class DdbFeedDao implements FeedDao {
             Item: {
                 [this.owner_handle]: owner_handle,
                 [this.timestamp]: status.timestamp,
-                [this.status]: status,
+                [this.status]: JSON.stringify(status),
             }
         }
         await this.client.send(new PutCommand(params));
     }
-
 }
