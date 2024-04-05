@@ -19,7 +19,23 @@ export class DdbFollowsDao implements FollowsDao {
     readonly followerUser = "follower_user";
     readonly followeeUser = "followee_user";
 
-    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
+    readonly marshallOptions = {
+        // Whether to automatically convert empty strings, blobs, and sets to `null`.
+        convertEmptyValues: false, // false, by default.
+        // Whether to remove undefined values while marshalling.
+        removeUndefinedValues: true, // false, by default.
+        // Whether to convert typeof object to map attribute.
+        convertClassInstanceToMap: true, // false, by default.
+    };
+    readonly unmarshallOptions = {
+        // Whether to return numbers as a string instead of converting them to native JavaScript numbers.
+        wrapNumbers: false, // false, by default.
+    };
+
+    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient(), {
+        marshallOptions: this.marshallOptions,
+        unmarshallOptions: this.unmarshallOptions,
+    });
 
     public async putFollows(follower: User, followee: User): Promise<void> {
         const params = {
@@ -89,7 +105,7 @@ export class DdbFollowsDao implements FollowsDao {
                     ? undefined
                     : {
                         [this.followerHandle]: followerHandle,
-                        [this.followeeHandle]: lastFollowee,
+                        [this.followeeHandle]: lastFollowee.alias,
                     },
         };
 
@@ -122,8 +138,8 @@ export class DdbFollowsDao implements FollowsDao {
                 lastFollower === null
                     ? undefined
                     : {
-                        [this.followerHandle]: lastFollower,
-                        [this.followeeHandle]: followeeHandle,
+                        [this.followerHandle]: lastFollower.alias,
+                        [this.followeeHandle]: followeeHandle
                     },
         };
 
