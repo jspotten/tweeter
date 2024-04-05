@@ -7,7 +7,6 @@ import {UserService} from "../model/service/UserService";
 export const handler = async (event: LoadMoreUsersRequest): Promise<LoadMoreUsersResponse> => {
     try {
         const request = LoadMoreUsersRequest.fromJson(event);
-
         if(!request.authToken || !request.user || !request.pageSize)
         {
             throw new Error("[Bad Request]");

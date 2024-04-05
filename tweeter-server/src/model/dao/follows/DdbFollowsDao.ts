@@ -27,8 +27,8 @@ export class DdbFollowsDao implements FollowsDao {
             Item: {
                 [this.followerHandle]: follower.alias,
                 [this.followeeHandle]: followee.alias,
-                [this.followerUser]: follower,
-                [this.followeeUser]: followee,
+                [this.followerUser]: JSON.stringify(follower),
+                [this.followeeUser]: JSON.stringify(followee),
             },
         };
         await this.client.send(new PutCommand(params));
@@ -62,7 +62,7 @@ export class DdbFollowsDao implements FollowsDao {
             }
         };
         const output = await this.client.send(new GetCommand(params));
-        return output.Item == undefined
+        return output.Item !== undefined
     }
 
     public async deleteFollows(follower: User, followee: User): Promise<void> {

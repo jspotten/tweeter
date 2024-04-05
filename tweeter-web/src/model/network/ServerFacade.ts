@@ -31,6 +31,10 @@ export class ServerFacade {
     async login(request: LoginRequest): Promise<AuthenticateResponse> {
         const endpoint: string = "/tweeter/login";
         const response = await this.clientCommunicator.doPost<LoginRequest, AuthenticateResponse>(request, endpoint)
+        if(!response._success)
+        {
+            throw new Error(response._message);
+        }
         return AuthenticateResponse.fromJson(response)
     }
 

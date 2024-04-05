@@ -89,7 +89,10 @@ const UserInfo = () => {
                       id="unFollowButton"
                       className="btn btn-md btn-secondary me-1"
                       type="submit"
-                      onClick={(event) => presenter.unfollowDisplayedUser(event)}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        presenter.unfollowDisplayedUser(displayedUser)
+                      }}
                     >
                       Unfollow
                     </button>
@@ -98,7 +101,10 @@ const UserInfo = () => {
                       id="followButton"
                       className="btn btn-md btn-primary me-1"
                       type="submit"
-                      onClick={(event) => presenter.followDisplayedUser(event)}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        presenter.followDisplayedUser(displayedUser)
+                      }}
                     >
                       Follow
                     </button>

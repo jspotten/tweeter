@@ -62,7 +62,7 @@ export class UserService {
     ): Promise<[followersCount: number, followeesCount: number]> {
         const followRequest = new FollowRequest(authToken, userToFollow);
         const followResponse = await this.facade.follow(followRequest);
-        console.log(followResponse._message)
+
         const followersCount = await this.getFollowersCount(authToken, userToFollow);
         const followeesCount = await this.getFolloweesCount(authToken, userToFollow);
 

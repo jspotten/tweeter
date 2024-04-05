@@ -68,8 +68,9 @@ export class DdbUsersDao implements UsersDao {
             Key: {
                 [this.handle]: userHandle
             },
+            ExpressionAttributeValues: { ":val": value},
             UpdateExpression:
-                `SET ${this.followersCount} = ${this.followersCount + value}`
+                "SET " + this.followersCount + " = " + this.followersCount + " + :val",
         };
         await this.client.send(new UpdateCommand(params));
     }
@@ -81,8 +82,9 @@ export class DdbUsersDao implements UsersDao {
             Key: {
                 [this.handle]: userHandle
             },
+            ExpressionAttributeValues: { ":val": value},
             UpdateExpression:
-                `SET ${this.followeesCount} = ${this.followeesCount + value}`
+                "SET " + this.followeesCount + " = " + this.followeesCount + " + :val",
         };
         await this.client.send(new UpdateCommand(params));
     }

@@ -1,5 +1,5 @@
-import {AuthToken, Status, User} from "tweeter-shared"
 import {Service} from "./Service";
+import {AuthToken, Status, User} from "tweeter-shared";
 
 export class StatusService extends Service {
     private feedDao = this.daoFactory.makeFeedDao();

@@ -8,14 +8,14 @@ interface ResponseJson {
 }
 
 export class AuthenticateResponse implements TweeterResponse {
-    private readonly _user: User;
-    private readonly _token: AuthToken;
+    private readonly _user: User | null;
+    private readonly _token: AuthToken | null;
     readonly _success: boolean;
     readonly _message: string | undefined;
 
     constructor(
-        user: User,
-        token: AuthToken,
+        user: User | null,
+        token: AuthToken | null,
         message: string,
         success: boolean,
 

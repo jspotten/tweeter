@@ -7,7 +7,6 @@ import { StatusService } from "../model/service/StatusService";
 export const handler = async (event: LoadMoreStatusesRequest): Promise<LoadMoreStatusesResponse> => {
     try {
         const request = LoadMoreStatusesRequest.fromJson(event);
-
         if(!request.authToken || !request.user || !request.pageSize)
         {
             throw new Error("[Bad Request]");

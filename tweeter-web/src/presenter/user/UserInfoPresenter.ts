@@ -55,26 +55,27 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
 
 
     public async followDisplayedUser(
-        event: React.MouseEvent
+        displayedUser: User | null
     ): Promise<void> {
+        console.log(this.view.displayedUser)
         await this.updateFollow(
-            this.service.follow(this.view.authToken!, this.view.displayedUser!),
+            this.service.follow(this.view.authToken!, displayedUser!),
             'Adding',
             'follow user',
             true,
-            event,
+
         )
     };
 
     public async unfollowDisplayedUser(
-        event: React.MouseEvent
+        displayedUser: User | null
     ): Promise<void> {
         await this.updateFollow(
-            this.service.unfollow(this.view.authToken!, this.view.displayedUser!),
+            this.service.unfollow(this.view.authToken!, displayedUser!),
             'Removing',
             'unfollow user',
-            false,
-            event)
+            false
+        )
     };
 
 
@@ -83,9 +84,7 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
         actionStr: string,
         actionDetails: string,
         isFollower: boolean,
-        event: React.MouseEvent,
     ): Promise<void> {
-        event.preventDefault();
         await this.reportFailingAction(async () => {
             this.displayMessage(actionStr)
 
