@@ -48,7 +48,7 @@ export class DdbFollowsDao implements FollowsDao {
         const items: string[] = [];
         const data = await this.client.send(new QueryCommand(params));
         data.Items?.forEach((item) =>
-            items.push(item.follower_handle)
+            items.push(item[this.followerHandle])
         );
         return items;
     }
@@ -76,7 +76,7 @@ export class DdbFollowsDao implements FollowsDao {
         await this.client.send(new DeleteCommand(params));
     }
 
-    async getPageOfFollowees(followerHandle: string, pageSize: number, lastFolloweeHandle: string | undefined): Promise<DataPage<User>> {
+    async getPageOfFollowees(followerHandle: string, pageSize: number, lastFollowee: User | null): Promise<DataPage<User>> {
         const params = {
             KeyConditionExpression: `${this.followerHandle} = :v`,
             ExpressionAttributeValues: {
@@ -85,19 +85,18 @@ export class DdbFollowsDao implements FollowsDao {
             TableName: this.tableName,
             Limit: pageSize,
             ExclusiveStartKey:
-                lastFolloweeHandle === undefined
+                lastFollowee === null
                     ? undefined
                     : {
                         [this.followerHandle]: followerHandle,
-                        [this.followeeHandle]: lastFolloweeHandle,
+                        [this.followeeHandle]: lastFollowee,
                     },
         };
 
         const items: User[] = [];
         const data = await this.client.send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
-        data.Items?.forEach((item) =>
-            {
+        data.Items?.forEach((item) => {
                 let user = User.fromJson(item.followee_user)
                 if(user)
                 {
@@ -109,7 +108,7 @@ export class DdbFollowsDao implements FollowsDao {
     }
 
     async getPageOfFollowers(
-        followeeHandle: string, pageSize: number, lastFollowerHandle: string | undefined
+        followeeHandle: string, pageSize: number, lastFollower: User | null
     ): Promise<DataPage<User>> {
         const params = {
             KeyConditionExpression: `${this.followeeHandle} = :v`,
@@ -120,10 +119,10 @@ export class DdbFollowsDao implements FollowsDao {
             IndexName: this.indexName,
             Limit: pageSize,
             ExclusiveStartKey:
-                lastFollowerHandle === undefined
+                lastFollower === null
                     ? undefined
                     : {
-                        [this.followerHandle]: lastFollowerHandle,
+                        [this.followerHandle]: lastFollower,
                         [this.followeeHandle]: followeeHandle,
                     },
         };
@@ -131,8 +130,7 @@ export class DdbFollowsDao implements FollowsDao {
         const items: User[] = [];
         const data = await this.client.send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
-        data.Items?.forEach((item) =>
-            {
+        data.Items?.forEach((item) => {
                 let user = User.fromJson(item.follower_user)
                 if(user)
                 {

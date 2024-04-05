@@ -47,8 +47,7 @@ export class StatusService extends Service {
         await this.storyDao.putStatus(newStatus);
         const followers = await this.followsDao.getFollowers(newStatus.user.alias);
 
-        for(let followeeHandle in followers)
-        {
+        for (const followeeHandle of followers) {
             await this.feedDao.putStatus(followeeHandle, newStatus);
         }
         return ["Successful Posting of Status", true]

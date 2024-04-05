@@ -10,12 +10,11 @@ export interface FollowsDao {
     getPageOfFollowees(
         followerHandle: string,
         pageSize: number,
-        lastFolloweeHandle: string | undefined
+        lastFollowee: User | null
     ) : Promise<DataPage<User>>;
     getPageOfFollowers(
-
         followeeHandle: string,
         pageSize: number,
-        lastFollowerHandle: string | undefined
+        lastFollower: User | null
     ): Promise<DataPage<User>>
 }

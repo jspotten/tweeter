@@ -23,7 +23,12 @@ export class UserService extends Service {
     ): Promise<[User[], boolean, string, boolean]>
     {
         await this.validateAuthToken(authToken)
-        return [...FakeData.instance.getPageOfUsers(lastItem, pageSize, user), "Successful Loading of More Followers", true];
+        const usersDataPage = await this.followsDao.getPageOfFollowers(
+            user.alias,
+            pageSize,
+            lastItem
+        )
+        return [usersDataPage.values, usersDataPage.hasMorePages, "Successful Loading of More Followers", true];
     }
 
     public async loadMoreFollowees(
@@ -34,7 +39,12 @@ export class UserService extends Service {
     ): Promise<[User[], boolean, string, boolean]>
     {
         await this.validateAuthToken(authToken)
-        return [...FakeData.instance.getPageOfUsers(lastItem, pageSize, user), "Successful Loading of More Followees", true];
+        const usersDataPage = await this.followsDao.getPageOfFollowees(
+            user.alias,
+            pageSize,
+            lastItem
+        )
+        return [usersDataPage.values, usersDataPage.hasMorePages, "Successful Loading of More Followers", true];
     };
 
     public async follow(
