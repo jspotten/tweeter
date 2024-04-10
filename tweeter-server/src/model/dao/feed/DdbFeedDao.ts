@@ -1,32 +1,14 @@
 import {FeedDao} from "./FeedDao";
 import {DataPage} from "../DataPage";
-import {DeleteCommand, DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
-import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
+import {DeleteCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Status} from "tweeter-shared";
+import {DdbDao} from "../DdbDao";
 
-export class DdbFeedDao implements FeedDao {
+export class DdbFeedDao extends DdbDao implements FeedDao {
     readonly tableName: string = 'feed';
     readonly owner_handle = 'owner_handle';
     readonly timestamp = 'timestamp';
     readonly status = 'status';
-
-    readonly marshallOptions = {
-        // Whether to automatically convert empty strings, blobs, and sets to `null`.
-        convertEmptyValues: false, // false, by default.
-        // Whether to remove undefined values while marshalling.
-        removeUndefinedValues: true, // false, by default.
-        // Whether to convert typeof object to map attribute.
-        convertClassInstanceToMap: false, // false, by default.
-    };
-    readonly unmarshallOptions = {
-        // Whether to return numbers as a string instead of converting them to native JavaScript numbers.
-        wrapNumbers: false, // false, by default.
-    };
-
-    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient(), {
-        marshallOptions: this.marshallOptions,
-        unmarshallOptions: this.unmarshallOptions,
-    });
 
     public async deleteStatus(status: Status): Promise<void> {
         const params = {
@@ -36,7 +18,7 @@ export class DdbFeedDao implements FeedDao {
                 [this.timestamp]: status.timestamp,
             }
         };
-        await this.client.send(new DeleteCommand(params));
+        await this.getClient().send(new DeleteCommand(params));
     }
 
     public async getPageOfFeedStatuses(followerHandle: string, pageSize: number, lastStatus: Status | null): Promise<DataPage<Status>> {
@@ -57,7 +39,7 @@ export class DdbFeedDao implements FeedDao {
         };
 
         const items: Status[] = [];
-        const data = await this.client.send(new QueryCommand(params));
+        const data = await this.getClient().send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
         // Store the entire user in the table instead of just the handle.
         data.Items?.forEach((item) => {
@@ -80,6 +62,6 @@ export class DdbFeedDao implements FeedDao {
                 [this.status]: JSON.stringify(status),
             }
         }
-        await this.client.send(new PutCommand(params));
+        await this.getClient().send(new PutCommand(params));
     }
 }

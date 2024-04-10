@@ -1,41 +1,22 @@
 import {DataPage} from "../DataPage";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {FollowsDao} from "./FollowsDao";
 import {User} from "tweeter-shared";
 import {
     DeleteCommand,
-    DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
     QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
+import {DdbDao} from "../DdbDao";
 
 
-export class DdbFollowsDao implements FollowsDao {
+export class DdbFollowsDao extends DdbDao implements FollowsDao{
     readonly tableName = "follows";
     readonly indexName = "follows_index";
     readonly followerHandle = "follower_handle";
     readonly followeeHandle = "followee_handle";
     readonly followerUser = "follower_user";
     readonly followeeUser = "followee_user";
-
-    readonly marshallOptions = {
-        // Whether to automatically convert empty strings, blobs, and sets to `null`.
-        convertEmptyValues: false, // false, by default.
-        // Whether to remove undefined values while marshalling.
-        removeUndefinedValues: true, // false, by default.
-        // Whether to convert typeof object to map attribute.
-        convertClassInstanceToMap: true, // false, by default.
-    };
-    readonly unmarshallOptions = {
-        // Whether to return numbers as a string instead of converting them to native JavaScript numbers.
-        wrapNumbers: false, // false, by default.
-    };
-
-    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient(), {
-        marshallOptions: this.marshallOptions,
-        unmarshallOptions: this.unmarshallOptions,
-    });
 
     public async putFollows(follower: User, followee: User): Promise<void> {
         const params = {
@@ -47,7 +28,7 @@ export class DdbFollowsDao implements FollowsDao {
                 [this.followeeUser]: JSON.stringify(followee),
             },
         };
-        await this.client.send(new PutCommand(params));
+        await this.getClient().send(new PutCommand(params));
     }
 
     public async getFollowers(followeeHandle: string): Promise<string[]>
@@ -62,7 +43,7 @@ export class DdbFollowsDao implements FollowsDao {
         };
 
         const items: string[] = [];
-        const data = await this.client.send(new QueryCommand(params));
+        const data = await this.getClient().send(new QueryCommand(params));
         data.Items?.forEach((item) =>
             items.push(item[this.followerHandle])
         );
@@ -77,7 +58,7 @@ export class DdbFollowsDao implements FollowsDao {
                 [this.followeeHandle]: selectedUser.alias,
             }
         };
-        const output = await this.client.send(new GetCommand(params));
+        const output = await this.getClient().send(new GetCommand(params));
         return output.Item !== undefined
     }
 
@@ -89,7 +70,7 @@ export class DdbFollowsDao implements FollowsDao {
                 [this.followeeHandle]: followee.alias,
             }
         };
-        await this.client.send(new DeleteCommand(params));
+        await this.getClient().send(new DeleteCommand(params));
     }
 
     async getPageOfFollowees(followerHandle: string, pageSize: number, lastFollowee: User | null): Promise<DataPage<User>> {
@@ -110,7 +91,7 @@ export class DdbFollowsDao implements FollowsDao {
         };
 
         const items: User[] = [];
-        const data = await this.client.send(new QueryCommand(params));
+        const data = await this.getClient().send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
         data.Items?.forEach((item) => {
                 let user = User.fromJson(item.followee_user)
@@ -144,7 +125,7 @@ export class DdbFollowsDao implements FollowsDao {
         };
 
         const items: User[] = [];
-        const data = await this.client.send(new QueryCommand(params));
+        const data = await this.getClient().send(new QueryCommand(params));
         const hasMorePages = data.LastEvaluatedKey !== undefined;
         data.Items?.forEach((item) => {
                 let user = User.fromJson(item.follower_user)

@@ -1,15 +1,14 @@
 import { UsersDao } from "./UsersDao";
 import { User} from "tweeter-shared";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {DdbDao} from "../DdbDao";
 import {
-    DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 
-export class DdbUsersDao implements UsersDao {
+export class DdbUsersDao extends DdbDao implements UsersDao {
     readonly tableName: string = 'users';
     readonly handle: string = "handle";
     readonly password: string = "password"
@@ -18,9 +17,7 @@ export class DdbUsersDao implements UsersDao {
     readonly imgUrl: string = "img_url";
     readonly followersCount: string = 'followers_count';
     readonly followeesCount: string = 'followees_count';
-
-    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
-
+    
     public async getUserByHandle(userHandle: string): Promise<[User | null, string, number, number]> {
         const params = {
             TableName: this.tableName,
@@ -28,7 +25,7 @@ export class DdbUsersDao implements UsersDao {
                 [this.handle]: userHandle
             }
         };
-        const output = await this.client.send(new GetCommand(params));
+        const output = await this.getClient().send(new GetCommand(params));
         return output.Item == undefined
             ? [null, "", 0, 0]
             : [
@@ -57,7 +54,7 @@ export class DdbUsersDao implements UsersDao {
                 [this.followeesCount]: 0,
             }
         }
-        await this.client.send(new PutCommand(params));
+        await this.getClient().send(new PutCommand(params));
         return user;
     }
 
@@ -72,7 +69,7 @@ export class DdbUsersDao implements UsersDao {
             UpdateExpression:
                 "SET " + this.followersCount + " = " + this.followersCount + " + :val",
         };
-        await this.client.send(new UpdateCommand(params));
+        await this.getClient().send(new UpdateCommand(params));
     }
 
     public async updateUserFolloweeCount(userHandle: string, value: number): Promise<void>
@@ -86,6 +83,6 @@ export class DdbUsersDao implements UsersDao {
             UpdateExpression:
                 "SET " + this.followeesCount + " = " + this.followeesCount + " + :val",
         };
-        await this.client.send(new UpdateCommand(params));
+        await this.getClient().send(new UpdateCommand(params));
     }
 }
