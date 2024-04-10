@@ -1,13 +1,13 @@
 import {DataPage} from "../DataPage";
 import {FollowsDao} from "./FollowsDao";
 import {User} from "tweeter-shared";
+import {DdbDao} from "../DdbDao";
 import {
     DeleteCommand,
     GetCommand,
     PutCommand,
     QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
-import {DdbDao} from "../DdbDao";
 
 
 export class DdbFollowsDao extends DdbDao implements FollowsDao{
@@ -73,7 +73,7 @@ export class DdbFollowsDao extends DdbDao implements FollowsDao{
         await this.getClient().send(new DeleteCommand(params));
     }
 
-    async getPageOfFollowees(followerHandle: string, pageSize: number, lastFollowee: User | null): Promise<DataPage<User>> {
+    public async getPageOfFollowees(followerHandle: string, pageSize: number, lastFollowee: User | null): Promise<DataPage<User>> {
         const params = {
             KeyConditionExpression: `${this.followerHandle} = :v`,
             ExpressionAttributeValues: {
@@ -104,7 +104,7 @@ export class DdbFollowsDao extends DdbDao implements FollowsDao{
         return new DataPage<User>(items, hasMorePages);
     }
 
-    async getPageOfFollowers(
+    public async getPageOfFollowers(
         followeeHandle: string, pageSize: number, lastFollower: User | null
     ): Promise<DataPage<User>> {
         const params = {
