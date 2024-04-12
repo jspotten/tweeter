@@ -45,11 +45,15 @@ export class StatusService extends Service {
         await this.validateAuthToken(authToken)
 
         await this.storyDao.putStatus(newStatus);
-        const followers = await this.followsDao.getFollowers(newStatus.user.alias);
-
-        for (const followeeHandle of followers) {
-            await this.feedDao.putStatus(followeeHandle, newStatus);
-        }
         return ["Successful Posting of Status", true]
     };
+
+    public async postStatusToFeed(
+        followerAliases: string[],
+        status: Status,
+    ): Promise<void> {
+        for (const followeeHandle of followerAliases) {
+            await this.feedDao.putStatus(followeeHandle, status);
+        }
+    }
 }

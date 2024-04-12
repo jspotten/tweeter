@@ -15,6 +15,12 @@ export class UserService extends Service {
         return user;
     };
 
+    public async getUserFollowers(
+        followeeHandle: string
+    ): Promise<string[]> {
+        return this.followsDao.getFollowers(followeeHandle);
+    }
+
     public async loadMoreFollowers(
         authToken: AuthToken,
         user: User,
