@@ -2,7 +2,7 @@ import {UpdateFeedLambdaRequest} from "../model/UpdateFeedLambdaRequest";
 import {StatusService} from "../model/service/StatusService";
 
 export const handler = async (event: any) => {
-    for (let i = 0; event.Records.length; i++)
+    for (let i = 0; i < event.Records.length; i++)
     {
         const { body } = event.Records[i];
         const updateFeedLambdaRequest: UpdateFeedLambdaRequest =

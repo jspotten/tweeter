@@ -2,8 +2,8 @@ import {User} from "../domain/User";
 import {PostSegment} from "../domain/PostSegment";
 
 export interface StatusDTO {
-    readonly post: string,
-    readonly user: User,
-    readonly timestamp: number,
-    readonly segments: PostSegment[],
+    readonly _post: string,
+    readonly _user: User,
+    readonly _timestamp: number,
+    readonly _segments: PostSegment[],
 }

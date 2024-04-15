@@ -17,7 +17,7 @@ export class UpdateFeedLambdaRequest {
     }
 
     static fromJson(request: UpdateFeedLambdaRequest): UpdateFeedLambdaRequest {
-        const deserializedStatus = Status.fromJson(JSON.stringify(request.newStatus))
+        const deserializedStatus = Status.fromJson(JSON.stringify(request._newStatus))
         if (deserializedStatus === null) {
             throw new Error(
                 "UpdateFeedLambdaRequest, could not deserialize newStatus with json:\n" +
@@ -26,7 +26,7 @@ export class UpdateFeedLambdaRequest {
         }
 
         return new UpdateFeedLambdaRequest(
-            request.followerAliases,
+            request._followerAliases,
             deserializedStatus,
         )
     }

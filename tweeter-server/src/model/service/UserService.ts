@@ -18,7 +18,7 @@ export class UserService extends Service {
     public async getUserFollowers(
         followeeHandle: string
     ): Promise<string[]> {
-        return this.followsDao.getFollowers(followeeHandle);
+        return await this.followsDao.getFollowers(followeeHandle);
     }
 
     public async loadMoreFollowers(

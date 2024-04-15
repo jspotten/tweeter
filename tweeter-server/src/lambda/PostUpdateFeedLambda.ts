@@ -4,7 +4,7 @@ import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import {UpdateFeedLambdaRequest} from "../model/UpdateFeedLambdaRequest";
 
 export const handler = async (event: any) => {
-    for(let i = 0; event.Records.length; i++)
+    for(let i = 0; i < event.Records.length; i++)
     {
         const { body } = event.Records[i];
         const status: Status | null = Status.fromJson(body);
@@ -21,7 +21,7 @@ export const handler = async (event: any) => {
 
 async function sendMessage(aliases: string[], status: Status): Promise<void> {
     let sqsClient = new SQSClient();
-    const sqs_url = "https://sqs.us-west-2.amazonaws.com/972160817952/tweeter-post-status";
+    const sqs_url = "https://sqs.us-west-2.amazonaws.com/972160817952/tweeter-update-feed";
 
     const params = {
         DelaySeconds: 10,

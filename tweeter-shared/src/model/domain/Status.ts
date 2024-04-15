@@ -1,14 +1,13 @@
 import { PostSegment, Type } from "./PostSegment";
 import { User } from "./User";
 import moment from "moment";
-import {UserDTO} from "../dto/UserDTO";
 import {StatusDTO} from "../dto/StatusDTO";
 
 export class Status {
-  private _post: string;
-  private _user: User;
-  private _timestamp: number;
-  private _segments: PostSegment[];
+  public _post: string;
+  public _user: User;
+  public _timestamp: number;
+  public _segments: PostSegment[];
 
   public constructor(post: string, user: User, timestamp: number) {
     this._post = post;
@@ -285,17 +284,17 @@ export class Status {
   public static fromDTO(dto: StatusDTO | null | undefined): Status | null
   {
     return dto ? new Status(
-        dto.post,
-        dto.user,
-        dto.timestamp) : null;
+        dto._post,
+        dto._user,
+        dto._timestamp) : null;
   }
 
   public get dto(): StatusDTO {
     return {
-      post: this.post,
-      user: this.user,
-      timestamp: this.timestamp,
-      segments: this.segments,
+      _post: this.post,
+      _user: this.user,
+      _timestamp: this.timestamp,
+      _segments: this.segments,
     }
   }
 }
