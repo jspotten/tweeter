@@ -6,7 +6,8 @@ import {UpdateFeedLambdaRequest} from "../model/UpdateFeedLambdaRequest";
 export const handler = async (event: any) => {
     for(let i = 0; event.Records.length; i++)
     {
-        const status: Status | null = Status.fromJson(JSON.parse(event.Records[i].body));
+        const { body } = event.Records[i];
+        const status: Status | null = Status.fromJson(body);
         if(status)
         {
             let followerAliases = await new UserService().getUserFollowers(status.user.alias)

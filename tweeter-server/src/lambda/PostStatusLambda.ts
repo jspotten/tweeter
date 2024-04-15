@@ -35,7 +35,7 @@ async function sendMessage(status: Status): Promise<void> {
 
     const params = {
         DelaySeconds: 10,
-        MessageBody: JSON.stringify(status),
+        MessageBody: JSON.stringify(status.dto),
         QueueUrl: sqs_url,
     };
 
