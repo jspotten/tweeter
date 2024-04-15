@@ -80,6 +80,7 @@ export class DdbFollowsDao extends DdbDao implements FollowsDao{
                 ":v": followerHandle,
             },
             TableName: this.tableName,
+            ScanIndexForward: false,
             Limit: pageSize,
             ExclusiveStartKey:
                 lastFollowee === null

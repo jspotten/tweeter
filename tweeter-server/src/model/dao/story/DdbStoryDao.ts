@@ -37,6 +37,7 @@ export class DdbStoryDao extends DdbDao implements StoryDao {
                 ":v": authorHandle,
             },
             TableName: this.tableName,
+            ScanIndexForward: false,
             Limit: pageSize,
             ExclusiveStartKey:
                 lastStatus === null

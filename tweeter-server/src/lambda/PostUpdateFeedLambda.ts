@@ -4,13 +4,16 @@ import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import {UpdateFeedLambdaRequest} from "../model/UpdateFeedLambdaRequest";
 
 export const handler = async (event: any) => {
-    const status: Status | null = Status.fromJson(event.Records[0]);
-    if(status)
+    for(let i = 0; event.Records.length; i++)
     {
-        let followerAliases = await new UserService().getUserFollowers(status.user.alias)
-        for(let i = 0; i < followerAliases.length % 25; i ++)
+        const status: Status | null = Status.fromJson(JSON.parse(event.Records[i].body));
+        if(status)
         {
-            await sendMessage(followerAliases.splice(i, i + 25), status)
+            let followerAliases = await new UserService().getUserFollowers(status.user.alias)
+            for(let i = 0; i < followerAliases.length % 25; i ++)
+            {
+                await sendMessage(followerAliases.splice(i, i + 25), status)
+            }
         }
     }
 }
