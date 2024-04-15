@@ -32,7 +32,7 @@ export class UserDaoFillTable extends DdbDao{
                 })
                 .catch((err: any) => {
                     throw new Error('Error while batchwriting users with params: '+ params + ": \n" + err);
-                });;
+                });
         }
     }
     private createPutUserRequestItems(userList: User[], hashedPassword: string){
