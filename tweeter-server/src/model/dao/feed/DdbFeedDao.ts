@@ -1,8 +1,16 @@
 import {FeedDao} from "./FeedDao";
 import {DataPage} from "../DataPage";
-import {DeleteCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {
+    BatchWriteCommand,
+    BatchWriteCommandInput,
+    BatchWriteCommandOutput,
+    DeleteCommand,
+    PutCommand,
+    QueryCommand
+} from "@aws-sdk/lib-dynamodb";
 import {Status} from "tweeter-shared";
 import {DdbDao} from "../DdbDao";
+import {execSync} from "child_process";
 
 export class DdbFeedDao extends DdbDao implements FeedDao {
     readonly tableName: string = 'feed';
@@ -63,5 +71,59 @@ export class DdbFeedDao extends DdbDao implements FeedDao {
             }
         }
         await this.getClient().send(new PutCommand(params));
+    }
+
+    public async putStatuses(followerAliases: string[], newStatus: Status){
+        if(followerAliases.length == 0){
+            console.log('zero follower aliases to batch write to');
+            return;
+        }
+        else{
+            const params = {
+                RequestItems: {
+                    [this.tableName]: this.createPutFeedStatusRequestItems(followerAliases, newStatus)
+                }
+            }
+            await this.getClient().send(new BatchWriteCommand(params))
+                .then(async (resp: any) => {
+                    await this.putUnprocessedItems(resp, params);
+                })
+                .catch((err: any) => {
+                    throw new Error('Error while batchwriting feed items with params: '+ params + ": \n" + err);
+                });
+        }
+    }
+    private createPutFeedStatusRequestItems(aliases: string[], status: Status){
+        return aliases.map(alias => this.createPutFeedStatusRequest(alias, status));
+    }
+    private createPutFeedStatusRequest(alias: string, status: Status){
+        let item = {
+            [this.owner_handle]: alias,
+            [this.timestamp]: status.timestamp,
+            [this.status]: status,
+        }
+        return {
+            PutRequest: {
+                Item: item
+            }
+        };
+    }
+
+    private async putUnprocessedItems(resp: BatchWriteCommandOutput, params: BatchWriteCommandInput){
+        if(resp.UnprocessedItems != undefined){
+            let sec = 0.01;
+            while(Object.keys(resp.UnprocessedItems).length > 0) {
+                console.log(Object.keys(resp.UnprocessedItems.feed).length + ' unprocessed items');
+                //The ts-ignore with an @ in front must be as a comment in order to ignore an error for the next line for compiling.
+                // @ts-ignore
+                params.RequestItems = resp.UnprocessedItems;
+                execSync('sleep ' + sec);
+                if(sec < 1) sec += 0.1;
+                await this.getClient().send(new BatchWriteCommand(params));
+                if(resp.UnprocessedItems == undefined){
+                    break;
+                }
+            }
+        }
     }
 }

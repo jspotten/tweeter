@@ -7,6 +7,10 @@ export interface FeedDao {
         owner_handle: string,
         status: Status
     ): Promise<void>;
+    putStatuses(
+        followerAliases: string[],
+        status: Status
+    ): Promise<void>;
     deleteStatus(status: Status): Promise<void>;
     getPageOfFeedStatuses(
         ownerHandle: string,

@@ -52,8 +52,6 @@ export class StatusService extends Service {
         followerAliases: string[],
         status: Status,
     ): Promise<void> {
-        for (const followeeHandle of followerAliases) {
-            await this.feedDao.putStatus(followeeHandle, status);
-        }
+        await this.feedDao.putStatuses(followerAliases, status);
     }
 }

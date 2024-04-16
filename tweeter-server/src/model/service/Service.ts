@@ -3,7 +3,7 @@ import {DaoFactory} from "../dao/factory/DaoFactory";
 import {AuthToken} from "tweeter-shared";
 
 export abstract class Service {
-    private expirationTime = 120000;
+    private expirationTime = 1200000;
     protected daoFactory: DaoFactory = new DdbDaoFactory()
     protected authTokenDao = this.daoFactory.makeAuthTokenDao();
 
