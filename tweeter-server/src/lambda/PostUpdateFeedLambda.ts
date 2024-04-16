@@ -1,4 +1,4 @@
-import { Status } from "tweeter-shared"
+import {Status, User} from "tweeter-shared"
 import {UserService} from "../model/service/UserService";
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import {UpdateFeedLambdaRequest} from "../model/UpdateFeedLambdaRequest";
@@ -10,11 +10,21 @@ export const handler = async (event: any) => {
         const status: Status | null = Status.fromJson(body);
         if(status)
         {
-            let followerAliases = await new UserService().getUserFollowers(status.user.alias)
-            const numberBatches = Math.ceil(followerAliases.length / 200.0)
-            for(let i = 0; i < numberBatches; i++)
+            let hasMoreItems = true;
+            let lastItem: User | null = null
+            while(hasMoreItems)
             {
-                await sendMessage(followerAliases.splice(0, 200), status)
+                let followers = await new UserService().getFollowers(
+                    status.user.alias,
+                    200,
+                    lastItem,
+                )
+                const numberBatches = Math.ceil(followerAliases.length / 200.0)
+                for(let i = 0; i < numberBatches; i++)
+                {
+                    await sendMessage(followerAliases.splice(0, 200), status)
+                }
+                // map function to extract aliases
             }
         }
     }

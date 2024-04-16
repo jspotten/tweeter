@@ -1,11 +1,11 @@
 import { UsersDao } from "./UsersDao";
-import { User} from "tweeter-shared";
 import {DdbDao} from "../DdbDao";
 import {
     GetCommand,
     PutCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
+import {User} from "tweeter-shared";
 
 
 export class DdbUsersDao extends DdbDao implements UsersDao {

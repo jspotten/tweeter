@@ -1,5 +1,5 @@
-import {AuthToken, FakeData, User} from "tweeter-shared";
 import {Service} from "./Service";
+import {AuthToken, User} from "tweeter-shared";
 
 export class UserService extends Service {
     private followsDao = this.daoFactory.makeFollowsDao();
@@ -122,4 +122,19 @@ export class UserService extends Service {
         const isFollower = await this.followsDao.getFollows(user, selectedUser);
         return [isFollower, "Successful Retrieval of Follow Status", true];
     };
+
+    public async getFollowers(
+        alias: string,
+        pageSize: number,
+        lastItem: User | null
+    ): Promise<[string[], boolean, User | null]> {
+        const usersDataPage = await this.followsDao.getPageOfFollowers(
+            alias,
+            pageSize,
+            lastItem
+        )
+        const lastIndex = usersDataPage.values.length - 1
+        const aliases: string[] = usersDataPage.values.map((user: User) => user.alias)
+        return [aliases, usersDataPage.hasMorePages, usersDataPage.values[lastIndex]];
+    }
 }
