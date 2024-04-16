@@ -2,22 +2,13 @@ import { ServerFacade } from "../../src/model/network/ServerFacade";
 import "@testing-library/jest-dom"
 import {
     AuthToken,
-    FollowCountRequest, LoadMoreStatusesRequest,
-    LoadMoreUsersRequest, LoginRequest,
-    RegisterRequest, Status,
+    LoginRequest,
     User
 } from "tweeter-shared";
 import "isomorphic-fetch";
-import {StatusService} from "../../src/model/service/StatusService";
-import {LoginPresenter} from "../../src/presenter/authentication/LoginPresenter";
 import {render, screen} from "@testing-library/react";
 import {MemoryRouter} from "react-router-dom";
-import Login from "../../src/components/authentication/login/Login";
-import {UserEvent, userEvent} from "@testing-library/user-event/index";
-import {StoryPresenter} from "../../src/presenter/main/StoryPresenter";
-import {ItemScroller} from "../../src/components/mainLayout/ItemScroller";
-import {PagedItemView} from "../../src/presenter/PagedItemPresenter";
-import StatusItem from "../../src/components/statusItem/StatusItem";
+import { userEvent} from "@testing-library/user-event/index";
 import PostStatus from "../../src/components/postStatus/PostStatus";
 import {PostStatusPresenter} from "../../src/presenter/main/PostStatusPresenter";
 import * as m from "ts-mockito";

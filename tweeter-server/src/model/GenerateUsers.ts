@@ -3,20 +3,20 @@ import {User} from "tweeter-shared";
 import {UserDaoFillTable} from "./dao/users/UserDaoFillTable";
 import {FollowsDaoFillTable} from "./dao/follows/FollowsDaoFillTable";
 
-let mainUsername = "@DonaldTrump";
+let mainUsername = "@bmarley";
 let followername = "@Serpent";
 let password = "password";
 let imageUrl = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";
 let firstName = "first";
 let lastName = "last";
 let mainUser: User = new User(
-    'Donald',
-    'Trump',
-    '@DonaldTrump',
-    'https://tweeter-images-jaden.s3.us-west-2.amazonaws.com/images/@DonaldTrump',
+    'Bob',
+    'Marley',
+    '@bmarley',
+    'https://tweeter-images-jaden.s3.us-west-2.amazonaws.com/images/@bmarley',
 )
 
-let numUsers = 25;
+let numUsers = 10000;
 let batchSize = 25;
 let aliasList: User[] = Array.from({length: numUsers}, (_, i) => {
     return new User(firstName + i, lastName + i, followername + i, imageUrl)

@@ -36,6 +36,7 @@ export class DdbFeedDao extends DdbDao implements FeedDao {
                 ":v": followerHandle,
             },
             TableName: this.tableName,
+            ScanIndexForward: false,
             Limit: pageSize,
             ExclusiveStartKey:
                 lastStatus === null
@@ -100,7 +101,7 @@ export class DdbFeedDao extends DdbDao implements FeedDao {
         let item = {
             [this.owner_handle]: alias,
             [this.timestamp]: status.timestamp,
-            [this.status]: status,
+            [this.status]: JSON.stringify(status),
         }
         return {
             PutRequest: {

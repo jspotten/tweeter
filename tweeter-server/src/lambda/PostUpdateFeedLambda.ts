@@ -11,9 +11,10 @@ export const handler = async (event: any) => {
         if(status)
         {
             let followerAliases = await new UserService().getUserFollowers(status.user.alias)
-            for(let i = 0; i < followerAliases.length % 25; i ++)
+            const numberBatches = Math.ceil(followerAliases.length / 200.0)
+            for(let i = 0; i < numberBatches; i++)
             {
-                await sendMessage(followerAliases.splice(i, i + 25), status)
+                await sendMessage(followerAliases.splice(0, 200), status)
             }
         }
     }

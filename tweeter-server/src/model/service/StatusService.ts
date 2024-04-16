@@ -52,6 +52,10 @@ export class StatusService extends Service {
         followerAliases: string[],
         status: Status,
     ): Promise<void> {
-        await this.feedDao.putStatuses(followerAliases, status);
+        const numberBatches = Math.ceil(followerAliases.length / 25.0)
+        for(let i = 0; i < numberBatches; i++)
+        {
+            await this.feedDao.putStatuses(followerAliases.splice(0, 25), status)
+        }
     }
 }
