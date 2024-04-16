@@ -14,17 +14,14 @@ export const handler = async (event: any) => {
             let lastItem: User | null = null
             while(hasMoreItems)
             {
-                let followers = await new UserService().getFollowers(
+                let [ aliases, _hasMoreItems, _lastItem] = await new UserService().getFollowers(
                     status.user.alias,
                     200,
                     lastItem,
                 )
-                const numberBatches = Math.ceil(followerAliases.length / 200.0)
-                for(let i = 0; i < numberBatches; i++)
-                {
-                    await sendMessage(followerAliases.splice(0, 200), status)
-                }
-                // map function to extract aliases
+                hasMoreItems = _hasMoreItems
+                lastItem = _lastItem
+                await sendMessage(aliases, status)
             }
         }
     }
